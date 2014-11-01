@@ -165,6 +165,9 @@
     return rank;
   };
 
+  var id = 'fi-inspector';
+  var inspector;
+
   var show = function (rank) {
     var max = rank[0].weight;
     var min = rank[rank.length - 1].weight;
@@ -181,28 +184,37 @@
       return code;
     });
 
-    var out = document.createElement('div');
-    out.id = guid();
-    out.style.cssText = [
-      'position: fixed',
-      'top: 0',
-      'left: 0',
-      'width: 100%',
-      'height: 100%',
-      'background-color: rgba(0, 0, 0, 0.7)',
-      'padding: 15px 20px',
-      'line-height: 1.5',
-      'text-shadow: 1px 1px 0 #000',
-      'color: #fff',
-      'text-align: left',
-      'z-index: 2147483647'
-    ].join(';');
-    out.innerHTML = html.join('');
-    document.body.appendChild(out);
-    out.onclick = function () {
-      out.parentNode.removeChild(out);
+    inspector = document.getElementById(id);
+    if (!inspector) {
+      inspector = document.createElement('div');
+      inspector.id = id;
+      inspector.style.cssText = [
+        'position: fixed',
+        'top: 0',
+        'left: 0',
+        'width: 100%',
+        'height: 100%',
+        'background-color: rgba(0, 0, 0, 0.7)',
+        'padding: 15px 20px',
+        'line-height: 1.5',
+        'text-shadow: 1px 1px 0 #000',
+        'color: #fff',
+        'text-align: left',
+        'z-index: 2147483647'
+      ].join(';');
+    }
+    inspector.innerHTML = html.join('');
+    document.body.appendChild(inspector);
+    inspector.onclick = function () {
+      remove(this);
     };
   }
+
+  var remove = function (elem) {
+    if (elem) {
+      elem.parentNode.removeChild(elem);
+    }
+  };
 
   show(calculate());
 })();
