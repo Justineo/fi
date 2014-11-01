@@ -174,8 +174,8 @@
         ? maxSize
         : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
       var code = [
-        '<p style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;">',
-          item.family + ' (' + item.count + ')',
+        '<p style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
+          escape(item.family) + ' (' + item.count + ')',
         '</p>'
         ].join('');
       return code;
@@ -183,7 +183,20 @@
 
     var out = document.createElement('div');
     out.id = guid();
-    out.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); padding: 15px 20px; line-height: 1.5; text-shadow: 1px 1px 0 #000; color: #fff; z-index: 2147483647;';
+    out.style.cssText = [
+      'position: fixed',
+      'top: 0',
+      'left: 0',
+      'width: 100%',
+      'height: 100%',
+      'background-color: rgba(0, 0, 0, 0.7)',
+      'padding: 15px 20px',
+      'line-height: 1.5',
+      'text-shadow: 1px 1px 0 #000',
+      'color: #fff',
+      'text-align: left',
+      'z-index: 2147483647'
+    ].join(';');
     out.innerHTML = html.join('');
     document.body.appendChild(out);
     out.onclick = function () {
