@@ -1,0 +1,30 @@
+{
+  "name": "fi",
+  "version": "1.0.0",
+  "description": "A snippet for inspecting font-family usage in a webpage.",
+  "main": "fi.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.8.9",
+    "gulp-uglify": "~1.0.0",
+    "gulp-rename": "~1.2.0",
+    "gulp-mustache": "~1.0.0",
+    "htmlencode": "~0.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Justineo/fi.git"
+  },
+  "keywords": [
+    "font-family"
+  ],
+  "author": "inspector",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Justineo/fi/issues"
+  },
+  "homepage": "https://github.com/Justineo/fi"
+}
