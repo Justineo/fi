@@ -3,7 +3,6 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var mustache = require("gulp-mustache");
 var fs = require('fs');
-var htmlencode = require('htmlencode');
 
 gulp.task('minify', function() {
   return gulp.src('./fi.js')
@@ -12,17 +11,15 @@ gulp.task('minify', function() {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('readme', ['minify'], function() {
-  return gulp.src("./README.tpl")
+gulp.task('home', ['minify'], function() {
+  return gulp.src("./index.tpl")
     .pipe(mustache({
-      bookmark: htmlencode.htmlEncode(
-        fs.readFileSync('./fi.min.js', {
+      bookmark: fs.readFileSync('./fi.min.js', {
           encoding: 'utf8'
-        })
-      )
+      })
     }))
-    .pipe(rename({ extname: '.md' }))
+    .pipe(rename({ extname: '.html' }))
     .pipe(gulp.dest("."));
 });
 
-gulp.task('default', ['readme']);
+gulp.task('default', ['home']);
