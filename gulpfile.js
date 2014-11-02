@@ -14,7 +14,7 @@ gulp.task('minify', function() {
 gulp.task('home', ['minify'], function() {
   return gulp.src("./index.tpl")
     .pipe(mustache({
-      bookmark: fs.readFileSync('./fi.min.js', {
+      code: fs.readFileSync('./fi.min.js', {
           encoding: 'utf8'
       })
     }))

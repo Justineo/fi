@@ -2,10 +2,65 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>fi: A simple web page font-family usage inspector.</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #28a428;
+            font-family: "Avenir Next", "Segoe UI", Arial, sans-serif;
+            font-weight: 100;
+            color: #fff;
+        }
+
+        main {
+            position: absolute;
+            top: 38.2%;
+            left: 50%;
+            transform: translate(-50%, -38.2%);
+            width: 600px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 100;
+        }
+
+        #action {
+            display: block;
+            width: 200px;
+            margin-right: auto;
+            margin-left: auto;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            line-height: 2;
+            color: #fff;
+            font-size: 32px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #action:hover {
+            background-color: #fff;
+            color: #28a428;
+        }
+
+        #hint {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <main>Save as a bookmarklet or drag this onto your bookmark bar &rarr; <a href="javascript:!function(){var t,n=function(t){return[].slice.call(t)},e=function(t){return t.replace(&#x2F;^\s+|\s+$&#x2F;g,&quot;&quot;)},i=function(t){return t.replace(&#x2F;\s+&#x2F;g,&quot; &quot;)},o=function(t){return i(e(t))},r=function(t,e,i){if(&quot;function&quot;!=typeof i||i(t)){if(t.childNodes.length)for(var o=n(t.childNodes),u=0,a=o.length;a&gt;u;u++)r(o[u],e,i);&quot;function&quot;==typeof e&amp;&amp;e(t)}},u=function(t){return t.nodeType===Node.TEXT_NODE},a=function(t){if(!t||t===document.documentElement)return!0;{var n=window.getComputedStyle(t);t.parentNode}return&quot;none&quot;!==n.display&amp;&amp;&quot;hidden&quot;!==n.visibility&amp;&amp;0!==parseFloat(n.opacity)&amp;&amp;a(t.parentNode)},c={SCRIPT:!0,NOSCRIPT:!0,STYLE:!0,IFRAME:!0,OPTION:!0},f=function(t){var n=t.parentNode;return u(t)&amp;&amp;a(n)&amp;&amp;!c[n.tagName]},l={&quot;&amp;&quot;:&quot;&amp;amp;&quot;,&quot;&lt;&quot;:&quot;&amp;lt;&quot;,&quot;&gt;&quot;:&quot;&amp;gt;&quot;,&#39;&quot;&#39;:&quot;&amp;quot;&quot;,&quot;&#39;&quot;:&quot;&amp;#x27;&quot;,&quot;`&quot;:&quot;&amp;#x60;&quot;},d=function(t){if(Object.keys)return Object.keys(t);var n=[];for(var e in t)t.hasOwnProperty(e)&amp;&amp;d.push(e);return n},p=function(t){var n=function(t){return l[t]},e=&quot;(?:&quot;+d(l).join(&quot;|&quot;)+&quot;)&quot;,i=RegExp(e),o=RegExp(e,&quot;g&quot;);return t=null==t?&quot;&quot;:&quot;&quot;+t,i.test(t)?t.replace(o,n):t},g={},h=48,s=16,y=function(){g={},r(document.body,function(t){if(f(t)){var n=o(t.nodeValue),e=n.length;if(e){var i=window.getComputedStyle(t.parentNode).fontFamily;g.hasOwnProperty(i)||(g[i]=0),g[i]+=e}}});var t=[];for(var n in g)0!==g[n]&amp;&amp;t.push({family:n,count:g[n],weight:Math.log(g[n])});return t.sort(function(t,n){return n.weight-t.weight}),t},m=&quot;fi-inspector&quot;,v=function(n){var e=n[0].weight,i=n[n.length-1].weight,o=n.map(function(t){var o=1===n.length?h:(t.weight-i)&#x2F;(e-i)*(h-s)+s,r=[&#39;&lt;p style=&quot;font-family: &#39;+p(t.family)+&quot;; font-size: &quot;+o+&#39;px;&quot; title=&quot;&#39;+p(t.family)+&#39;&quot;&gt;&#39;,p(t.family)+&quot; (&quot;+t.count+&quot;)&quot;,&quot;&lt;&#x2F;p&gt;&quot;].join(&quot;&quot;);return r});t=document.getElementById(m),t||(t=document.createElement(&quot;div&quot;),t.id=m,t.style.cssText=[&quot;position: fixed&quot;,&quot;top: 0&quot;,&quot;left: 0&quot;,&quot;width: 100%&quot;,&quot;height: 100%&quot;,&quot;background-color: rgba(0, 0, 0, 0.7)&quot;,&quot;padding: 15px 20px&quot;,&quot;line-height: 1.5&quot;,&quot;text-shadow: 1px 1px 0 #000&quot;,&quot;color: #fff&quot;,&quot;text-align: left&quot;,&quot;z-index: 2147483647&quot;].join(&quot;;&quot;)),t.innerHTML=o.join(&quot;&quot;),document.body.appendChild(t),t.onclick=function(){w(this)}},w=function(t){t&amp;&amp;t.parentNode.removeChild(t)};v(y())}();">fi</a></main>
-    <footer>Style this page later...</footer>
+    <main>
+        <h1>Inspect font-family usage in a web page through a single click</h1>
+        <p><a id="action" href="javascript:!function(){function e(e,t){var n=document.createElement(&quot;style&quot;);n.type=&quot;text&#x2F;css&quot;,t=t||document.body,t.appendChild(n),n.styleSheet?n.styleSheet.cssText=e:n.appendChild(document.createTextNode(e))}var t,n,i=function(e){return[].slice.call(e)},o=function(e){return e.replace(&#x2F;^\s+|\s+$&#x2F;g,&quot;&quot;)},r=function(e){return e.replace(&#x2F;\s+&#x2F;g,&quot; &quot;)},a=function(e){return r(o(e))},l=function(e,t,n){if(&quot;function&quot;!=typeof n||n(e)){if(e.childNodes.length)for(var o=i(e.childNodes),r=0,a=o.length;a&gt;r;r++)l(o[r],t,n);&quot;function&quot;==typeof t&amp;&amp;t(e)}},u=function(e){return e.nodeType===Node.TEXT_NODE},c=function(e){if(!e||e===document.documentElement)return!0;{var t=window.getComputedStyle(e);e.parentNode}return&quot;none&quot;!==t.display&amp;&amp;&quot;hidden&quot;!==t.visibility&amp;&amp;0!==parseFloat(t.opacity)&amp;&amp;c(e.parentNode)},d={SCRIPT:!0,NOSCRIPT:!0,STYLE:!0,IFRAME:!0,OPTION:!0},f=function(e){var t=e.parentNode;return u(e)&amp;&amp;c(t)&amp;&amp;!d[t.tagName]},p={&quot;&amp;&quot;:&quot;&amp;amp;&quot;,&quot;&lt;&quot;:&quot;&amp;lt;&quot;,&quot;&gt;&quot;:&quot;&amp;gt;&quot;,&#39;&quot;&#39;:&quot;&amp;quot;&quot;,&quot;&#39;&quot;:&quot;&amp;#x27;&quot;,&quot;`&quot;:&quot;&amp;#x60;&quot;},h=function(e){if(Object.keys)return Object.keys(e);var t=[];for(var n in e)e.hasOwnProperty(n)&amp;&amp;h.push(n);return t},s=function(e){var t=function(e){return p[e]},n=&quot;(?:&quot;+h(p).join(&quot;|&quot;)+&quot;)&quot;,i=RegExp(n),o=RegExp(n,&quot;g&quot;);return e=null==e?&quot;&quot;:&quot;&quot;+e,i.test(e)?e.replace(o,t):e},g=function(e){e&amp;&amp;e.parentNode.removeChild(e)},m={},y=48,v=16,x=function(){m={},l(document.body,function(e){if(f(e)){var t=a(e.nodeValue),n=t.length;if(n){var i=window.getComputedStyle(e.parentNode).fontFamily;m.hasOwnProperty(i)||(m[i]=0),m[i]+=n}}});var e=[];for(var t in m)0!==m[t]&amp;&amp;e.push({family:t,count:m[t],weight:Math.log(m[t])});return e.sort(function(e,t){return t.weight-e.weight}),e},w=&quot;fi-report&quot;,N=function(i){var o=i[0].weight,r=i[i.length-1].weight,a=i.map(function(e){var t=1===i.length?y:(e.weight-r)&#x2F;(o-r)*(y-v)+v,n=[&#39;&lt;li style=&quot;font-family: &#39;+s(e.family)+&quot;; font-size: &quot;+t+&#39;px;&quot; title=&quot;&#39;+s(e.family)+&#39;&quot;&gt;&#39;,s(e.family)+&quot; (&quot;+e.count+&quot;)&quot;,&quot;&lt;&#x2F;li&gt;&quot;].join(&quot;&quot;);return n});if(t=document.getElementById(w),!t){t=document.createElement(&quot;aside&quot;),t.id=w,n=document.createElement(&quot;ol&quot;),t.appendChild(n);var l=[&quot;#&quot;+w+&quot; {&quot;,&quot;overflow: auto;&quot;,&quot;position: fixed;&quot;,&quot;top: 0;&quot;,&quot;left: 0;&quot;,&quot;width: 100%;&quot;,&quot;height: 100%;&quot;,&quot;margin: 0;&quot;,&quot;padding: 15px 20px;&quot;,&quot;background-color: rgba(0, 0, 0, 0.7);&quot;,&quot;z-index: 2147483647;&quot;,&quot;}&quot;,&quot;#&quot;+w+&quot; li {&quot;,&quot;margin: 0;&quot;,&quot;padding: 0;&quot;,&quot;list-style: none;&quot;,&quot;line-height: 1.5;&quot;,&quot;color: #fff;&quot;,&quot;text-shadow: 1px 1px 0 #000;&quot;,&quot;text-align: left;&quot;,&quot;}&quot;].join(&quot;\n&quot;);e(l,t),document.body.appendChild(t)}n=t.firstChild,n.innerHTML=a.join(&quot;&quot;),t.onclick=function(){g(this)}};N(x())}();">fi</a></p>
+        <p id="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
+        <div class="github">
+            <iframe width="85" scrolling="0" height="20" frameborder="0" allowtransparency="true" src="http://ghbtns.com/github-btn.html?user=Justineo&amp;repo=fi&amp;type=watch&amp;count=true"></iframe>
+            <iframe width="85" scrolling="0" height="20" frameborder="0" allowtransparency="true" src="http://ghbtns.com/github-btn.html?user=Justineo&amp;repo=fi&amp;type=fork&amp;count=true"></iframe>
+        </div>
+    </main>
+    <footer></footer>
 </body>
 </html>

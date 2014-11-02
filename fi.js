@@ -112,6 +112,27 @@
     return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
   };
 
+  function createStyle(styleText, context) {
+      var style = document.createElement('style');
+      style.type = 'text/css';
+
+      // <style> element must be appended into DOM before setting `cssText`
+      // otherwise IE8 will interpret the text in IE7 mode.
+      context = context || document.body;
+      context.appendChild(style);
+      if (style.styleSheet) {
+          style.styleSheet.cssText = styleText;
+      } else {
+          style.appendChild(document.createTextNode(styleText));
+      }
+  }
+
+  var removeNode = function (node) {
+    if (node) {
+      node.parentNode.removeChild(node);
+    }
+  };
+
   /**
    * All prepared, let's get started
    */
@@ -165,8 +186,9 @@
     return rank;
   };
 
-  var id = 'fi-inspector';
-  var inspector;
+  var id = 'fi-report';
+  var report;
+  var list;
 
   var show = function (rank) {
     var max = rank[0].weight;
@@ -177,45 +199,55 @@
         ? maxSize
         : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
       var code = [
-        '<p style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
+        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
           escape(item.family) + ' (' + item.count + ')',
-        '</p>'
+        '</li>'
         ].join('');
       return code;
     });
 
-    inspector = document.getElementById(id);
-    if (!inspector) {
-      inspector = document.createElement('div');
-      inspector.id = id;
-      inspector.style.cssText = [
-        'position: fixed',
-        'top: 0',
-        'left: 0',
-        'width: 100%',
-        'height: 100%',
-        'overflow: auto',
-        'background-color: rgba(0, 0, 0, 0.7)',
-        'padding: 15px 20px',
-        'line-height: 1.5',
-        'text-shadow: 1px 1px 0 #000',
-        'color: #fff',
-        'text-align: left',
-        'z-index: 2147483647'
-      ].join(';');
+    report = document.getElementById(id);
+    if (!report) {
+      report = document.createElement('aside');
+      report.id = id;
+
+      list = document.createElement('ol');
+      report.appendChild(list);
+
+      var style = [
+        '#' + id + ' {',
+          'overflow: auto;',
+          'position: fixed;',
+          'top: 0;',
+          'left: 0;',
+          'width: 100%;',
+          'height: 100%;',
+          'margin: 0;',
+          'padding: 15px 20px;',
+          'background-color: rgba(0, 0, 0, 0.7);',
+          'z-index: 2147483647;',
+        '}',
+        '#' + id + ' li {',
+          'margin: 0;',
+          'padding: 0;',
+          'list-style: none;',
+          'line-height: 1.5;',
+          'color: #fff;',
+          'text-shadow: 1px 1px 0 #000;',
+          'text-align: left;',
+        '}'
+      ].join('\n');
+      createStyle(style, report);
+
+      document.body.appendChild(report);
     }
-    inspector.innerHTML = html.join('');
-    document.body.appendChild(inspector);
-    inspector.onclick = function () {
-      remove(this);
+
+    list = report.firstChild;
+    list.innerHTML = html.join('');
+    report.onclick = function () {
+      removeNode(this);
     };
   }
-
-  var remove = function (elem) {
-    if (elem) {
-      elem.parentNode.removeChild(elem);
-    }
-  };
 
   show(calculate());
 })();
