@@ -210,6 +210,7 @@
     if (!report) {
       report = document.createElement('aside');
       report.id = id;
+      report.title = 'Click to close';
 
       list = document.createElement('ol');
       report.appendChild(list);
