@@ -251,4 +251,6 @@
   }
 
   show(calculate());
+
+  return false;
 })();

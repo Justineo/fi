@@ -132,7 +132,7 @@ var _hmt = _hmt || [];
 <header><a id="repo-link">Fork me on GitHub</a></header>
 <main>
     <h1>Inspect font-family usage in a web page through a single click</h1>
-    <p><a id="action" href="javascript:{{code}}">fi</a></p>
+    <p><a id="action" href="javascript:{{code}}void(0)">fi</a></p>
     <p id="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
     <p id="github-stats">
         <span class="stat"><a class="text" id="star-text">Star</a><a id="star-count">-</a></span>
