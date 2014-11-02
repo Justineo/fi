@@ -99,10 +99,6 @@ h1 {
     margin-right: 3px;
 }
 
-.text:before {
-    float: left;
-}
-
 .stat:hover:before,
 #repo-link:hover:before {
     color: #28a428;
