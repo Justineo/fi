@@ -4,17 +4,24 @@ var rename = require('gulp-rename');
 var mustache = require("gulp-mustache");
 var fs = require('fs');
 
-gulp.task('minify', function() {
+gulp.task('minify-fi', function() {
   return gulp.src('./fi.js')
     .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('home', ['minify'], function() {
+gulp.task('minify-bookmarklet', function() {
+  return gulp.src('./bookmarklet.js')
+    .pipe(uglify())
+    .pipe(rename({ extname: '.min.js' }))
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('home', ['minify-fi', 'minify-bookmarklet'], function() {
   return gulp.src("./index.tpl")
     .pipe(mustache({
-      code: fs.readFileSync('./fi.min.js', {
+      code: fs.readFileSync('./bookmarklet.min.js', {
           encoding: 'utf8'
       })
     }))

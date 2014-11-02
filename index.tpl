@@ -155,6 +155,7 @@ var _hmt = _hmt || [];
     }
 
     function addCommas(n) {
+        n = Number(n);
         return String(n).replace(/(\d)(?=(\d{3})+$)/g, '$1,');
     }
 
