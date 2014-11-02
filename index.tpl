@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <title>fi: A simple web page font-family usage inspector.</title>
 <style>
+@font-face {
+  font-family: 'git';
+  src: url('font/git.eot?33992391');
+  src: url('font/git.eot?33992391#iefix') format('embedded-opentype'),
+       url('font/git.woff?33992391') format('woff'),
+       url('font/git.ttf?33992391') format('truetype'),
+       url('font/git.svg?33992391#git') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
     margin: 0;
     background-color: #28a428;
@@ -11,6 +22,17 @@ body {
     font-weight: 100;
     color: #fff;
     font-size: 12px;
+}
+
+a {
+    display: inline-block;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    color: #fff;
+    line-height: 2;
+    vertical-align: middle;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 main {
@@ -25,6 +47,7 @@ main {
 
 h1 {
     font-weight: 100;
+    font-size: 32px;
 }
 
 #action {
@@ -32,15 +55,10 @@ h1 {
     width: 200px;
     margin-right: auto;
     margin-left: auto;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    line-height: 2;
-    color: #fff;
     font-size: 32px;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s;
 }
 
+#repo-link:hover,
 #action:hover {
     background-color: #fff;
     color: #28a428;
@@ -52,18 +70,15 @@ h1 {
 }
 
 #github-stats a {
-    display: block;
     float: left;
-    padding: 2px 4px;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s;
-    color: #fff;
+    padding: 0 4px;
+    border: none;
     font-size: 11px;
 }
 
 #github-stats .stat {
-    display: inline-block;
     overflow: hidden;
+    display: inline-block;
     border: 1px solid #fff;
     border-radius: 3px;
 }
@@ -74,6 +89,29 @@ h1 {
 
 #github-stats .stat:hover a {
     color: #28a428;
+}
+
+#repo-link:before,
+.text:before {
+    content: "\e800";
+    font-family: git;
+    margin-right: 3px;
+}
+
+.text:before {
+    float: left;
+}
+
+.stat:hover:before,
+#repo-link:hover:before {
+    color: #28a428;
+}
+
+#repo-link {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 0 4px;
 }
 
 a[href^="http://tongji.baidu.com"] {
@@ -91,13 +129,14 @@ var _hmt = _hmt || [];
 </script>
 </head>
 <body>
+<header><a id="repo-link">Fork me on GitHub</a></header>
 <main>
     <h1>Inspect font-family usage in a web page through a single click</h1>
     <p><a id="action" href="javascript:{{code}}">fi</a></p>
     <p id="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
     <p id="github-stats">
-        <span class="stat"><a id="star-text">Star</a><a id="star-count">-</a></span>
-        <span class="stat"><a id="follow-text">Follow</a><a id="follower-count">-</a></span>
+        <span class="stat"><a class="text" id="star-text">Star</a><a id="star-count">-</a></span>
+        <span class="stat"><a class="text" id="follow-text">Follow</a><a id="follower-count">-</a></span>
     </div>
 </main>
 <script>
@@ -105,6 +144,7 @@ var _hmt = _hmt || [];
     var head = document.getElementsByTagName('head')[0];
     var user = 'Justineo';
     var repo = 'fi';
+    var repoLink = $('repo-link');
     var starText = $('star-text');
     var followText = $('follow-text');
     var starCount = $('star-count');
@@ -136,12 +176,15 @@ var _hmt = _hmt || [];
     }
 
     function init() {
-        starText.href = 'https://github.com/' + user + '/' + repo;
-        starCount.href = 'https://github.com/' + user + '/' + repo + '/stargazers';
+        var repoUrl = 'https://github.com/' + user + '/' + repo;
+        repoLink.href = repoUrl;
+        starText.href = repoUrl;
+        starCount.href = repoUrl + '/stargazers';
 
-        followText.href = 'https://github.com/' + user;
+        var userUrl = 'https://github.com/' + user;
+        followText.href = userUrl;
         followText.innerHTML = 'Follow @' + user;
-        followerCount.href = 'https://github.com/' + user + '/followers';
+        followerCount.href = userUrl + '/followers';
 
         window.callback = callback;
         jsonp('https://api.github.com/users/' + user);
