@@ -39,6 +39,7 @@ main {
     position: absolute;
     top: 38.2%;
     left: 50%;
+    -webkit-transform: translate(-50%, -38.2%);
     transform: translate(-50%, -38.2%);
     width: 600px;
     overflow: hidden;
