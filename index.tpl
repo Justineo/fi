@@ -76,6 +76,15 @@ h1 {
     color: #28a428;
 }
 </style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?14e3eaa9f77516e10d56d0d7757c4dcc";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 </head>
 <body>
 <main>
