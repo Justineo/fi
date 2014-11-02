@@ -75,6 +75,10 @@ h1 {
 #github-stats .stat:hover a {
     color: #28a428;
 }
+
+a[href^="http://tongji.baidu.com"] {
+    display: none;
+}
 </style>
 <script>
 var _hmt = _hmt || [];
