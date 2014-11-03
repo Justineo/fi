@@ -1,0 +1,16 @@
+@font-face{font-family:git;src:url(font/git.eot?33992391);src:url(font/git.eot?33992391#iefix) format('embedded-opentype'),url(font/git.woff?33992391) format('woff'),url(font/git.ttf?33992391) format('truetype'),url(font/git.svg?33992391#git) format('svg');font-weight:400;font-style:normal}
+body{margin:0;background-color:#28a428;font-family:"Avenir Next","Segoe UI",Arial,sans-serif;font-weight:100;color:#fff;font-size:12px}
+a{display:inline-block;border:1px solid #fff;border-radius:3px;color:#fff;line-height:2;vertical-align:middle;text-decoration:none;transition:background-color .3s,color .3s}
+main{position:absolute;top:38.2%;left:50%;-webkit-transform:translate(-50%,-38.2%);transform:translate(-50%,-38.2%);width:600px;overflow:hidden;text-align:center}
+h1{font-weight:100;font-size:32px}
+#action{display:block;width:200px;margin-right:auto;margin-left:auto;font-size:32px}
+#action:hover,#repo-link:hover{background-color:#fff;color:#28a428}
+#hint{color:rgba(255,255,255,.8);font-size:14px}
+#github-stats a{float:left;padding:0 4px;border:none;font-size:11px}
+#github-stats .stat{overflow:hidden;display:inline-block;border:1px solid #fff;border-radius:3px}
+#github-stats .stat:hover{background-color:#fff}
+#github-stats .stat:hover a{color:#28a428}
+#repo-link:before,.text:before{content:"\e800";font-family:git;margin-right:3px}
+#repo-link:hover:before,.stat:hover:before{color:#28a428}
+#repo-link{position:fixed;top:10px;right:10px;padding:0 4px}
+a[href^="http://tongji.baidu.com"]{display:none}
