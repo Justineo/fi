@@ -25,7 +25,7 @@ var _hmt = _hmt || [];
     <p id="github-stats">
         <span class="stat"><a class="text" id="star-text">Star</a><a id="star-count">-</a></span>
         <span class="stat"><a class="text" id="follow-text">Follow</a><a id="follower-count">-</a></span>
-    </div>
+    </p>
 </main>
 <script>
 {{{init}}}
