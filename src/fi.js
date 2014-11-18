@@ -133,6 +133,17 @@
     }
   };
 
+  var matches = function (elem, selector) {
+    var m = (elem.document || elem.ownerDocument).querySelectorAll(selector);
+    var i = 0;
+
+    while (m[i] && m[i] !== elem) {
+      i++;
+    }
+
+    return !!m[i];
+  };
+
   /**
    * All prepared, let's get started
    */
@@ -140,7 +151,7 @@
   // Use this to store result
   var familyMap = {};
   var maxSize = 36;
-  var minSize = 16;
+  var minSize = 18;
   var id = 'fi-report';
   var report;
   var list;
@@ -255,7 +266,7 @@
           'margin-left: 10px;',
           'padding: 0 5px;',
           'background-color: #000;',
-          'font-family: sans-serif;',
+          'font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;',
           'font-size: 0.5em;',
           'font-weight: 400;',
           'cursor: help;',
@@ -270,7 +281,8 @@
     list.innerHTML = html.join('');
     report.onclick = function (e) {
       var target = e.target || window.event.sourceElement;
-      if (!target.matches('#' + id + ' li, #' + id + ' li *')) {
+
+      if (!matches(target, '#' + id + ' li, #' + id + ' li *')) {
         removeNode(this);
       }
     };
