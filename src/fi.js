@@ -148,7 +148,7 @@
     familyMap = {};
 
     walk(document.body, function (n) {
-      if (!isRealText(n) || n === report) {
+      if (!isRealText(n)) {
         return;
       }
 
@@ -165,6 +165,8 @@
       }
 
       familyMap[family] += count;
+    }, function (n) {
+      return n !== report;
     });
 
     var rank = [];
