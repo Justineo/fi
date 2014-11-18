@@ -226,7 +226,7 @@
           'height: 100%;',
           'margin: 0;',
           'padding: 15px 20px;',
-          'background-color: rgba(0, 0, 0, 0.7);',
+          'background-color: rgba(0, 0, 0, 0.8);',
           'z-index: 2147483647;',
         '}',
         '#' + id + ' ol {',
