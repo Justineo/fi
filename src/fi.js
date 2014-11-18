@@ -141,6 +141,9 @@
   var familyMap = {};
   var maxSize = 48;
   var minSize = 16;
+  var id = 'fi-report';
+  var report;
+  var list;
 
   var calculate = function () {
 
@@ -166,7 +169,7 @@
 
       familyMap[family] += count;
     }, function (n) {
-      return n !== report;
+      return n.id !== id;
     });
 
     var rank = [];
@@ -188,10 +191,6 @@
     return rank;
   };
 
-  var id = 'fi-report';
-  var report;
-  var list;
-
   var show = function (rank) {
     var max = rank[0].weight;
     var min = rank[rank.length - 1].weight;
@@ -201,8 +200,8 @@
         ? maxSize
         : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
       var code = [
-        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
-          escape(item.family) + ' (' + item.count + ')',
+        '<li><span style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
+          escape(item.family) + '</span><span>(' + item.count + ')</span>',
         '</li>'
         ].join('');
       return code;
@@ -230,10 +229,16 @@
           'background-color: rgba(0, 0, 0, 0.7);',
           'z-index: 2147483647;',
         '}',
+        '#' + id + ' ol {',
+          'padding-left: 0;',
+        '}',
         '#' + id + ' li {',
+          'float: left;',
+          'clear: left;',
           'margin: 0;',
-          'padding: 0;',
+          'padding: 0 1em;',
           'list-style: none;',
+          'background-color: rgba(255, 255, 255, 0.2);',
           'line-height: 1.5;',
           'color: #fff;',
           'text-shadow: 1px 1px 0 #000;',
@@ -250,7 +255,7 @@
     report.onclick = function () {
       removeNode(this);
     };
-  }
+  };
 
   show(calculate());
 
