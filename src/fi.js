@@ -148,7 +148,7 @@
     familyMap = {};
 
     walk(document.body, function (n) {
-      if (!isRealText(n)) {
+      if (!isRealText(n) || n === report) {
         return;
       }
 
