@@ -255,6 +255,7 @@
           'margin-left: 10px;',
           'padding: 0 5px;',
           'background-color: #000;',
+          'font-family: sans-serif;',
           'font-size: 0.5em;',
           'font-weight: 400;',
           'cursor: help;',
