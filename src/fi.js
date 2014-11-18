@@ -139,7 +139,7 @@
 
   // Use this to store result
   var familyMap = {};
-  var maxSize = 48;
+  var maxSize = 36;
   var minSize = 16;
   var id = 'fi-report';
   var report;
@@ -200,8 +200,8 @@
         ? maxSize
         : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
       var code = [
-        '<li><span style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
-          escape(item.family) + '</span><span>(' + item.count + ')</span>',
+        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
+          escape(item.family) + '<small title="Character count: ' + item.count + '">' + item.count + '</small>',
         '</li>'
         ].join('');
       return code;
@@ -230,20 +230,35 @@
           'z-index: 2147483647;',
         '}',
         '#' + id + ' ol {',
+          'margin: 0;',
           'padding-left: 0;',
         '}',
         '#' + id + ' li {',
           'float: left;',
           'clear: left;',
           'margin: 0;',
-          'padding: 0 1em;',
+          'padding: 0 0 0 10px;',
+          'border-left: 3px solid rgba(255, 255, 255, 0.1);',
+          'background-color: rgba(255, 255, 255, 0.1);',
           'list-style: none;',
-          'background-color: rgba(255, 255, 255, 0.2);',
           'line-height: 1.5;',
           'color: #fff;',
           'text-shadow: 1px 1px 0 #000;',
           'text-align: left;',
-        '}'
+        '}',
+        '#' + id + ' li:hover {',
+          'background-color: rgba(255, 255, 255, 0.2);',
+          'border-left-color: #fff;',
+        '}',
+        '#' + id + ' small {',
+          'float: right;',
+          'margin-left: 10px;',
+          'padding: 0 5px;',
+          'background-color: #000;',
+          'font-size: 0.5em;',
+          'font-weight: 400;',
+          'cursor: help;',
+        '}',
       ].join('\n');
       createStyle(style, report);
 
@@ -252,8 +267,11 @@
 
     list = report.firstChild;
     list.innerHTML = html.join('');
-    report.onclick = function () {
-      removeNode(this);
+    report.onclick = function (e) {
+      var target = e.target || window.event.sourceElement;
+      if (!target.matches('#' + id + ' li, #' + id + ' li *')) {
+        removeNode(this);
+      }
     };
   };
 
