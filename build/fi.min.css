@@ -1,0 +1,9 @@
+#fi-report{overflow:auto;position:fixed;top:0;left:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0,0,0,.8);z-index:2147483647}
+#fi-report ol{margin:0;padding:10px}
+#fi-report li{float:left;clear:left;margin:0 0 10px;padding:0 0 0 10px;border-left:3px solid rgba(255,255,255,.1);background-color:rgba(255,255,255,.1);list-style:none;line-height:1.5;color:#fff;text-shadow:1px 1px 0 #000;text-align:left;cursor:pointer}
+#fi-report li:hover{background-color:rgba(255,255,255,.2);border-left-color:#fff}
+#fi-report .count{float:right;margin-left:10px;padding:0 5px;background-color:#000;font-size:.5em;cursor:help}
+#fi-report .link{position:absolute;right:10px;bottom:10px;padding:1px 10px;background-color:rgba(255,255,255,.1);font-size:10px;color:rgba(255,255,255,.7)}
+#fi-report .link strong{color:#fff;font-family:inherit;font-size:12px;font-weight:100}
+#fi-report .count,#fi-report .link{font-family:"Avenir Next","Segoe UI",Helvetica,Arial,sans-serif;font-weight:100}
+#fi-report .link:hover{background-color:rgba(255,255,255,.2)}
