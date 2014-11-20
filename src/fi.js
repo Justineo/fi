@@ -20,11 +20,6 @@
     return collapse(trim(s));
   };
 
-  var idCounter = 0x1024;
-  var guid = function () {
-    return idCounter++;
-  };
-
   /**
    * DOM utilities
    */
@@ -111,7 +106,7 @@
     string = string == null ? '' : '' + string;
     return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
   };
-
+{{#style}}
   function createStyle(styleText, context) {
       var style = document.createElement('style');
       style.type = 'text/css';
@@ -126,7 +121,7 @@
           style.appendChild(document.createTextNode(styleText));
       }
   }
-
+{{/style}}
   var removeNode = function (node) {
     if (node) {
       node.parentNode.removeChild(node);
@@ -144,22 +139,40 @@
     return !!m[i];
   };
 
+  var getEvent = function (e) {
+    return e || window.event;
+  };
+
+  var getTarget = function (e) {
+    e = e || getEvent(e);
+    return e.target || e.sourceElement;
+  };
+
+  var stopPropagation = function (e) {
+    e = e || getEvent(e);
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+    else {
+      e.cancelBubble = true;
+    }
+  };
+
   /**
    * All prepared, let's get started
    */
 
   // Use this to store result
-  var familyMap = {};
+  var weightMap = {};
+  var elemMap = {};
   var maxSize = 36;
   var minSize = 18;
   var id = 'fi-report';
-  var report;
-  var list;
 
   var calculate = function () {
 
     // cleanup
-    familyMap = {};
+    weightMap = {};
 
     walk(document.body, function (n) {
       if (!isRealText(n)) {
@@ -174,24 +187,25 @@
 
       var family = window.getComputedStyle(n.parentNode).fontFamily;
 
-      if (!familyMap.hasOwnProperty(family)) {
-        familyMap[family] = 0;
+      if (!weightMap.hasOwnProperty(family)) {
+        weightMap[family] = 0;
+        elemMap[family] = n.parentNode;
       }
 
-      familyMap[family] += count;
+      weightMap[family] += count;
     }, function (n) {
       return n.id !== id;
     });
 
     var rank = [];
-    for (var family in familyMap) {
-      if (familyMap[family] === 0) {
+    for (var family in weightMap) {
+      if (weightMap[family] === 0) {
         continue;
       }
       rank.push({
         family: family,
-        count: familyMap[family],
-        weight: Math.log(familyMap[family])
+        count: weightMap[family],
+        weight: Math.log(weightMap[family])
       });
     }
 
@@ -211,90 +225,53 @@
         ? maxSize
         : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
       var code = [
-        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '">',
-          escape(item.family) + '<small title="Character count: ' + item.count + '">' + item.count + '</small>',
+        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '" data-family="' + escape(item.family) + '">',
+          escape(item.family) + '<small class="count" title="' + item.count + ' glyph' + (item.count > 1 ? 's' : '') + '">' + item.count + '</small>',
         '</li>'
         ].join('');
       return code;
     });
 
-    report = document.getElementById(id);
+    var report = document.getElementById(id);
     if (!report) {
       report = document.createElement('aside');
       report.id = id;
       report.title = 'Click to close';
 
-      list = document.createElement('ol');
+      var list = document.createElement('ol');
       report.appendChild(list);
 
-      var style = [
-        '#' + id + ' {',
-          'overflow: auto;',
-          'position: fixed;',
-          'top: 0;',
-          'left: 0;',
-          'width: 100%;',
-          'height: 100%;',
-          'margin: 0;',
-          'padding: 0;',
-          'background-color: rgba(0, 0, 0, 0.8);',
-          'z-index: 2147483647;',
-        '}',
-        '#' + id + ':before {',
-          'content: "fi";',
-          'position: absolute;',
-          'top: 0;',
-          'right: 0;',
-          'padding: 1px 10px;',
-          'background-color: rgba(255, 255, 255, 0.1);',
-          'color: #fff;',
-          'font-size: 16px;',
-        '}',
-        '#' + id + ' ol {',
-          'margin: 0;',
-          'padding: 10px;',
-        '}',
-        '#' + id + ' li {',
-          'float: left;',
-          'clear: left;',
-          'margin: 0 0 10px;',
-          'padding: 0 0 0 10px;',
-          'border-left: 3px solid rgba(255, 255, 255, 0.1);',
-          'background-color: rgba(255, 255, 255, 0.1);',
-          'list-style: none;',
-          'line-height: 1.5;',
-          'color: #fff;',
-          'text-shadow: 1px 1px 0 #000;',
-          'text-align: left;',
-        '}',
-        '#' + id + ' li:hover {',
-          'background-color: rgba(255, 255, 255, 0.2);',
-          'border-left-color: #fff;',
-        '}',
-        '#' + id + ' small {',
-          'float: right;',
-          'margin-left: 10px;',
-          'padding: 0 5px;',
-          'background-color: #000;',
-          'font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;',
-          'font-size: 0.5em;',
-          'font-weight: 400;',
-          'cursor: help;',
-        '}',
-      ].join('\n');
+      var link = document.createElement('a');
+      link.className = 'link';
+      link.href = 'http://justineo.github.io/fi/';
+      link.innerHTML = 'Powered by <strong>fi</strong>';
+      report.appendChild(link);
+{{#style}}
+      var style = '{{{style}}}';
       createStyle(style, report);
-
+{{/style}}
       document.body.appendChild(report);
     }
 
     list = report.firstChild;
     list.innerHTML = html.join('');
     report.onclick = function (e) {
-      var target = e.target || window.event.sourceElement;
+      var target = getTarget(e);
 
       if (!matches(target, '#' + id + ' li, #' + id + ' li *')) {
-        removeNode(this);
+        if (!matches(target, '#' + id + ' .link, #' + id + ' .link *')) {
+          removeNode(this);
+        }
+      } else {
+        while(!matches(target, '#' + id + ' li')) {
+          target = target.parentNode;
+        }
+        var family = target.getAttribute('data-family');
+        var elem = elemMap[family];
+        elem.style.outline = '2px dotted red';
+        elem.scrollIntoView();
       }
+      stopPropagation(e);
     };
   };
 
