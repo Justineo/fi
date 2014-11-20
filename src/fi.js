@@ -106,7 +106,7 @@
     string = string == null ? '' : '' + string;
     return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
   };
-{{#style}}
+
   function createStyle(styleText, context) {
       var style = document.createElement('style');
       style.type = 'text/css';
@@ -121,7 +121,7 @@
           style.appendChild(document.createTextNode(styleText));
       }
   }
-{{/style}}
+
   var removeNode = function (node) {
     if (node) {
       node.parentNode.removeChild(node);
@@ -246,10 +246,10 @@
       link.href = 'http://justineo.github.io/fi/';
       link.innerHTML = 'Powered by <strong>fi</strong>';
       report.appendChild(link);
-{{#style}}
+
       var style = '{{{style}}}';
       createStyle(style, report);
-{{/style}}
+
       document.body.appendChild(report);
     }
 
