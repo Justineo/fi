@@ -17,11 +17,13 @@ var _hmt = _hmt || [];
 </script>
 </head>
 <body>
-<header><a id="repo-link">Fork me on GitHub</a></header>
+<header><a class="link github">Fork me on GitHub</a></header>
 <main>
     <h1>Inspect font-family usage in a web page through a single click</h1>
-    <p><a id="action" href="javascript:{{bookmarklet}}void(0)">fi</a></p>
-    <p id="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
+    <p><a class="link main" href="javascript:{{bookmarklet}}void(0)">fi</a></p>
+    <p class="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
+    <p class="hint headsup">Have <span title="Bookmarklets may be blocked under certain security policies.">problems</span>? Try browser extensions below:</p>
+    <p><a class="link chrome" href="https://chrome.google.com/webstore/detail/fi/ijieejlhfllnijjknojcklolfjllhknd">For Google Chrome</a></p>
     <p id="github-stats">
         <span class="stat"><a class="text" id="star-text">Star</a><a id="star-count">-</a></span>
         <span class="stat"><a class="text" id="follow-text">Follow</a><a id="follower-count">-</a></span>

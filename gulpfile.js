@@ -34,12 +34,12 @@ gulp.task('minify-js', ['minify-fi-css'], function () {
 gulp.task('home', ['minify-js', 'minify-home-css'], function () {
   return gulp.src("./src/index.tpl")
     .pipe(mustache({
-      style: fs.readFileSync('./build/index.min.css', { encoding: 'utf8' }),
-      bookmarklet: fs.readFileSync('./build/fi.min.js', { encoding: 'utf8' }),
-      init: fs.readFileSync('./build/index.min.js', { encoding: 'utf8' })
+      style: fs.readFileSync('./build/index.min.css', 'utf8'),
+      bookmarklet: fs.readFileSync('./build/fi.min.js', 'utf8'),
+      init: fs.readFileSync('./build/index.min.js', 'utf8')
     }))
     .pipe(rename({ extname: '.html' }))
     .pipe(gulp.dest("."));
 });
 
-gulp.task('default', ['home', 'minify-js']);
+gulp.task('default', ['home']);
