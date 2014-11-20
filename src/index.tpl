@@ -17,7 +17,7 @@ var _hmt = _hmt || [];
 </script>
 </head>
 <body>
-<header><a class="link github">Fork me on GitHub</a></header>
+<header><a class="link github" id="fork">Fork me on GitHub</a></header>
 <main>
     <h1>Inspect font-family usage in a web page through a single click</h1>
     <p><a class="link main" href="javascript:{{bookmarklet}}void(0)">fi</a></p>

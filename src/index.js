@@ -2,7 +2,7 @@
     var head = document.getElementsByTagName('head')[0];
     var user = 'Justineo';
     var repo = 'fi';
-    var repoLink = $('repo-link');
+    var forkLink = $('fork');
     var starText = $('star-text');
     var followText = $('follow-text');
     var starCount = $('star-count');
@@ -36,7 +36,7 @@
 
     function init() {
         var repoUrl = 'https://github.com/' + user + '/' + repo;
-        repoLink.href = repoUrl;
+        forkLink.href = repoUrl;
         starText.href = repoUrl;
         starCount.href = repoUrl + '/stargazers';
 
