@@ -27,4 +27,4 @@ Bookmarklets can be **blocked** under certain security policies so browser exten
 ### Browser Extensions
 
 * [Chrome](https://chrome.google.com/webstore/detail/fi/ijieejlhfllnijjknojcklolfjllhknd)
-* Firefox (not available for now)
+* [Firefox](https://addons.mozilla.org/zh-CN/firefox/addon/fi/)
