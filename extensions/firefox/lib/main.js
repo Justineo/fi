@@ -14,7 +14,7 @@ var button = buttons.ActionButton({
   },
   onClick: function () {
     var worker = tabs.activeTab.attach({
-      contentScriptFile: self.data.url('./fi.min.js')
+      contentScriptFile: self.data.url('./fi.js')
     });
 
     worker.port.on('check-used', function () {

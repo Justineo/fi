@@ -9,10 +9,11 @@ span[title]{border-bottom:1px dotted rgba(255,255,255,.8);cursor:help}
 .link:hover{background-color:#fff;color:#28a428}
 .link.main{display:block;width:200px;margin-right:auto;margin-left:auto;font-size:32px}
 .link.github{position:fixed;top:10px;right:10px}
-.chrome:before,.github:before,.headsup:before,.text:before{font-family:home;margin-right:3px}
+.chrome:before,.firefox:before,.github:before,.headsup:before,.text:before{font-family:home;margin-right:3px}
 .github:before,.text:before{content:"\e803"}
 .headsup:before{content:"\e804"}
 .chrome:before{content:"\e801"}
+.firefox:before{content:"\e800"}
 #github-stats a{float:left;padding:0 4px;border:none;font-size:11px}
 #github-stats .stat{overflow:hidden;display:inline-block;border:1px solid #fff;border-radius:3px}
 #github-stats .stat:hover{background-color:#fff}

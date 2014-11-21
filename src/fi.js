@@ -180,7 +180,7 @@
       }
 
       var text = compact(n.nodeValue);
-      var count = text.length;
+      var count = text.replace(/[\s\r\n]+/g, '').length;
       if (!count) {
         return;
       }
@@ -308,8 +308,10 @@
           }
           var family = target.getAttribute('data-family');
           var elem = elemMap[family];
-          elem.style.outline = '2px dotted red';
-          elem.scrollIntoView();
+          if (elem) {
+            elem.style.outline = '2px dotted red';
+            elem.scrollIntoView();
+          }
         }
         stopPropagation(e);
       };

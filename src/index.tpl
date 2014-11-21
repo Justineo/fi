@@ -23,7 +23,10 @@ var _hmt = _hmt || [];
     <p><a class="link main" href="javascript:{{bookmarklet}}void(0)">fi</a></p>
     <p class="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
     <p class="hint headsup">Have <span title="Bookmarklets may be blocked under certain security policies.">problems</span>? Try browser extensions below:</p>
-    <p><a class="link chrome" href="https://chrome.google.com/webstore/detail/fi/ijieejlhfllnijjknojcklolfjllhknd">For Google Chrome</a></p>
+    <p>
+      <a class="link chrome" href="https://chrome.google.com/webstore/detail/fi/ijieejlhfllnijjknojcklolfjllhknd">Chrome Extension</a>
+      <a class="link firefox" href="https://addons.mozilla.org/zh-CN/firefox/addon/fi/">Firefox Add-on</a>
+    </p>
     <p id="github-stats">
         <span class="stat"><a class="text" id="star-text">Star</a><a id="star-count">-</a></span>
         <span class="stat"><a class="text" id="follow-text">Follow</a><a id="follower-count">-</a></span>

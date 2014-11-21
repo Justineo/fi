@@ -80,6 +80,7 @@ span[title] {
 
 .text:before,
 .chrome:before,
+.firefox:before,
 .github:before,
 .headsup:before {
   font-family: home;
@@ -97,6 +98,10 @@ span[title] {
 
 .chrome:before {
   content: "\e801";
+}
+
+.firefox:before {
+  content: "\e800";
 }
 
 #github-stats a {

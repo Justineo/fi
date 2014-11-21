@@ -23,7 +23,7 @@ gulp.task('minify-home-css', function () {
 gulp.task('minify-fi-js', ['minify-fi-css'], function () {
   return gulp.src('./src/fi.js')
     .pipe(mustache({
-      style: fs.readFileSync('./build/fi.min.css')
+      style: fs.readFileSync('./build/fi.min.css', 'utf8')
     }))
     .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))
@@ -41,17 +41,9 @@ gulp.task('minify-home-js', ['minify-home-css'], function () {
 gulp.task('inject-fx-css', ['minify-fi-css'], function () {
   return gulp.src('./src/fi.js')
     .pipe(mustache({
-      style: fs.readFileSync('./build/fi.min.css'),
+      style: fs.readFileSync('./build/fi.min.css', 'utf8').replace(/\n/g, ''),
       firefox: true
     }))
-    .pipe(rename({ extname: '.source.js' }))
-    .pipe(gulp.dest('./extensions/firefox/data'));
-});
-
-gulp.task('minify-fx-js', ['inject-fx-css'], function () {
-  return gulp.src('./extensions/firefox/data/fi.source.js')
-    .pipe(uglify())
-    .pipe(rename('fi.min.js'))
     .pipe(gulp.dest('./extensions/firefox/data'));
 });
 
@@ -66,6 +58,6 @@ gulp.task('home', ['minify-fi-js', 'minify-home-js', 'minify-home-css'], functio
     .pipe(gulp.dest("."));
 });
 
-gulp.task('fx', ['minify-fx-js']);
+gulp.task('fx', ['inject-fx-css']);
 
 gulp.task('default', ['home', 'fx']);
