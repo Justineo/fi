@@ -20,8 +20,8 @@ gulp.task('minify-home-css', function () {
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('minify-js', ['minify-fi-css'], function () {
-  return gulp.src(['./src/fi.js', './src/index.js'])
+gulp.task('minify-fi-js', ['minify-fi-css'], function () {
+  return gulp.src('./src/fi.js')
     .pipe(mustache({
       style: fs.readFileSync('./build/fi.min.css')
     }))
@@ -31,7 +31,31 @@ gulp.task('minify-js', ['minify-fi-css'], function () {
     .pipe(gulp.dest('./extensions/chrome'));
 });
 
-gulp.task('home', ['minify-js', 'minify-home-css'], function () {
+gulp.task('minify-home-js', ['minify-home-css'], function () {
+  return gulp.src('./src/index.js')
+    .pipe(uglify())
+    .pipe(rename({ extname: '.min.js' }))
+    .pipe(gulp.dest('./build'))
+});
+
+gulp.task('inject-fx-css', ['minify-fi-css'], function () {
+  return gulp.src('./src/fi.js')
+    .pipe(mustache({
+      style: fs.readFileSync('./build/fi.min.css'),
+      firefox: true
+    }))
+    .pipe(rename({ extname: '.source.js' }))
+    .pipe(gulp.dest('./extensions/firefox/data'));
+});
+
+gulp.task('minify-fx-js', ['inject-fx-css'], function () {
+  return gulp.src('./extensions/firefox/data/fi.source.js')
+    .pipe(uglify())
+    .pipe(rename('fi.min.js'))
+    .pipe(gulp.dest('./extensions/firefox/data'));
+});
+
+gulp.task('home', ['minify-fi-js', 'minify-home-js', 'minify-home-css'], function () {
   return gulp.src("./src/index.tpl")
     .pipe(mustache({
       style: fs.readFileSync('./build/index.min.css', 'utf8'),
@@ -42,4 +66,6 @@ gulp.task('home', ['minify-js', 'minify-home-css'], function () {
     .pipe(gulp.dest("."));
 });
 
-gulp.task('default', ['home']);
+gulp.task('fx', ['minify-fx-js']);
+
+gulp.task('default', ['home', 'fx']);

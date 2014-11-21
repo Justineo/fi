@@ -218,9 +218,7 @@
 
   var report;
   var list;
-{{#firefox}}
   var usedList;
-{{/firefox}}
 
   var show = function (rank) {
     var max = rank[0].weight;
@@ -247,7 +245,6 @@
       list = document.createElement('ol');
       list.className = 'fi-families-list';
       report.appendChild(list);
-{{#firefox}}
       usedList = document.createElement('ol');
       usedList.className = 'fi-used-family-list';
       report.appendChild(usedList);
@@ -279,7 +276,6 @@
           report.className = 'fi-used';
         }
       };
-{{/firefox}}
       var close = document.createElement('button');
       close.className = 'fi-close';
       close.innerHTML = '×';
@@ -294,7 +290,23 @@
       link.innerHTML = 'Powered by <strong>fi</strong>';
       report.appendChild(link);
 
-      var style = '{{{style}}}';
+      var style = '#fi-report button::-moz-focus-inner{padding:0;border:0}
+#fi-report{overflow:auto;position:fixed;top:0;left:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0,0,0,.8);text-align:left;z-index:2147483647}
+#fi-report ol{margin:0;padding:10px}
+#fi-report li{float:left;clear:left;margin:0 0 10px;padding:0 0 0 10px;border-left:3px solid rgba(255,255,255,.1);background-color:rgba(255,255,255,.1);list-style:none;line-height:1.5;color:#fff;text-shadow:1px 1px 0 #000;text-align:left;cursor:pointer}
+#fi-report li:hover{background-color:rgba(255,255,255,.2);border-left-color:#fff}
+#fi-report .fi-count{float:right;margin-left:10px;padding:0 5px;background-color:#000;font-size:.5em;font-weight:400;cursor:help}
+#fi-report .fi-link{position:absolute;right:10px;bottom:10px;padding:1px 10px;border:none;border-radius:0;background-color:rgba(255,255,255,.1);font-size:10px;color:rgba(255,255,255,.7)}
+#fi-report .fi-link strong{color:#fff;font-family:inherit;font-size:12px;font-weight:100}
+#fi-report a,#fi-report button,#fi-report span{font-family:"Avenir Next","Segoe UI",Helvetica,Arial,sans-serif!important;font-weight:100}
+#fi-report .fi-close,#fi-report .fi-proceed,#fi-report .fi-switcher{padding:0;background-color:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);cursor:pointer}
+#fi-report .fi-close{position:absolute;top:10px;right:10px;width:48px;line-height:48px;text-align:center;font-size:28px;font-weight:700}
+#fi-report .fi-switcher{display:inline-block;margin:10px 0 0 10px;padding-left:10px;font-size:14px;line-height:24px;cursor:help}
+#fi-report .fi-switcher span{display:inline-block;vertical-align:middle}
+#fi-report .fi-proceed{display:inline-block;overflow:hidden;width:0;margin-left:10px;background-color:rgba(255,255,255,.3);line-height:24px;text-align:center;font-weight:400;transition:width .5s 1s;cursor:pointer}
+#fi-report .fi-switcher:hover .fi-proceed{width:80px;transition-delay:0s}
+#fi-report .fi-close:hover,#fi-report .fi-link:hover,#fi-report .fi-switcher:hover{background-color:rgba(255,255,255,.2);color:#fff}
+.fi-families .fi-used-family-list,.fi-used .fi-families-list{display:none}';
       createStyle(style, report);
 
       document.body.appendChild(report);
@@ -314,25 +326,18 @@
         stopPropagation(e);
       };
     }
-{{#firefox}}
     if (report.className === 'fi-used') {
       usedList.innerHTML = html.join('');
     } else {
       list.innerHTML = html.join('');
     }
-{{/firefox}}
-{{^firefox}}
-    list.innerHTML = html.join('');
-{{/firefox}}
   };
 
   show(calculate());
 
-  {{#firefox}}
   self.port.on('used-checked', function (data) {
     show(JSON.parse(data));
   });
-  {{/firefox}}
 
   return false;
 })();

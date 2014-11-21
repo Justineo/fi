@@ -7,9 +7,7 @@
   "icons": {
     "128": "128.png"
   },
-  "permissions": [
-    "activeTab"
-  ],
+  "permissions": [],
   "browser_action": {
     "default_icon": {
         "128": "128.png"
