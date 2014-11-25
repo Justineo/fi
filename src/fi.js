@@ -93,43 +93,6 @@
     }
   };
 
-  // `escape` borrowed from underscore
-  var escapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '`': '&#x60;'
-  };
-
-  var keys = function (obj) {
-    if (Object.keys) {
-      return Object.keys(obj);
-    }
-
-    var result = [];
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        keys.push(key);
-      }
-    }
-    return result;
-  };
-
-  var escape = function (string) {
-    var escaper = function (match) {
-      return escapeMap[match];
-    };
-
-    var source = '(?:' + keys(escapeMap).join('|') + ')';
-    var testRegexp = RegExp(source);
-    var replaceRegexp = RegExp(source, 'g');
-
-    string = string == null ? '' : '' + string;
-    return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
-  };
-
   function createStyle(styleText, context) {
       var style = document.createElement('style');
       style.type = 'text/css';
@@ -252,21 +215,6 @@
       return;
     }
 
-    var max = rank[0].weight;
-    var min = rank[rank.length - 1].weight;
-
-    var html = rank.map(function (item) {
-      var size = rank.length === 1
-        ? maxSize
-        : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
-      var code = [
-        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '" data-family="' + escape(item.family) + '">',
-          escape(item.family) + '<span class="fi-count" title="' + item.count + ' glyph' + (item.count > 1 ? 's' : '') + '">' + item.count + '</span>',
-        '</li>'
-        ].join('');
-      return code;
-    });
-
     report = document.getElementById(id);
     if (!report) {
       report = document.createElement('aside');
@@ -286,50 +234,50 @@
 
       var computed = {
         className: 'fi-computed',
-        hint: 'Switch to actual (rendered) font families',
-        title: 'Might be quite slow on pages with lots of text.'
+        hint: 'Showing computed font families',
+        title: 'Click “switch” to see used (rendered) font families'
       };
 
       var used = {
         className: 'fi-used',
-        hint: 'Switch to computed font families',
-        title: ''
+        hint: 'Showing used (rendered) font families',
+        title: 'Click “switch” to see computed font families'
       };
 
-      function update(data) {
-        hint.innerHTML = data.hint;
+      function updateHint(data) {
+        hint.textContent = data.hint;
         hint.title = data.title;
         report.className = data.className;
       }
 
       var hint = document.createElement('span');
       hint.className = 'fi-switcher-hint';
-      update(computed);
+      updateHint(computed);
       switcher.appendChild(hint);
 
       var proceed = document.createElement('button');
-      proceed.innerHTML = 'Go';
+      proceed.textContent = 'Switch';
       proceed.className = 'fi-proceed';
       switcher.appendChild(proceed);
 
       proceed.onclick = function () {
         if (report.className === used.className) {
           show(calculate());
-          update(computed);
+          updateHint(computed);
         } else {
           self.port.emit('check-used');
-          update(used);
+          updateHint(used);
         }
       };
 {{/firefox}}
       var expand = document.createElement('button');
       expand.className = 'fi-expand';
-      expand.innerHTML = 'fi';
+      expand.textContent = 'fi';
       report.appendChild(expand);
 
       var close = document.createElement('button');
       close.className = 'fi-close';
-      close.innerHTML = '×';
+      close.textContent = '×';
       report.appendChild(close);
       close.onclick = function () {
         removeNode(report);
@@ -373,16 +321,38 @@
         stopPropagation(e);
       };
     }
+
+    var max = rank[0].weight;
+    var min = rank[rank.length - 1].weight;
+    var output;
 {{#firefox}}
     if (report.className === 'fi-used') {
-      usedList.innerHTML = html.join('');
+      output = usedList;
     } else {
-      list.innerHTML = html.join('');
+      output = list;
     }
+{{/firefox}}{{^firefox}}
+    output = list;
 {{/firefox}}
-{{^firefox}}
-    list.innerHTML = html.join('');
-{{/firefox}}
+    output.innerHTML = '';
+    rank.forEach(function (item) {
+      var size = rank.length === 1
+        ? maxSize
+        : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
+      var li = document.createElement('li');
+      li.style.cssText = 'font-family: ' + item.family + '; font-size: ' + size + 'px;';
+      li.setAttribute('data-family', item.family);
+      li.title = item.family;
+      li.textContent = item.family;
+
+      var count = document.createElement('span');
+      count.className = 'fi-count';
+      count.title = item.count + ' glyph' + (item.count > 1 ? 's' : '');
+      count.textContent = item.count;
+
+      li.appendChild(count);
+      output.appendChild(li);
+    });
   };
 
   show(calculate());

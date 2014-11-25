@@ -39,7 +39,7 @@ exports.calculate = function () {
         weightMap[family] = 0;
       }
       weightMap[family]++;
-    });
+    }
 
   }, function (n) {
     return n.id !== id;

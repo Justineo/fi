@@ -138,7 +138,7 @@
   border: none;
 }
 
-#fi-report .fi-switcher-hint[title]:not([title=""]) {
+#fi-report .fi-switcher-hint {
   cursor: help;
 }
 

@@ -61,16 +61,9 @@ var isRealText = function (node) {
 };
 exports.isRealText = isRealText;
 
-exports.getFonts = function (node) {
+exports.getFonts = function (range) {
     if (!DOMUtils) {
         return [];
-    }
-
-    var range = node.ownerDocument.createRange();
-    try {
-        range.selectNode(node);
-    } catch (err) {
-        // TODO: error handling
     }
 
     var fontFaces = DOMUtils.getUsedFontFaces(range);

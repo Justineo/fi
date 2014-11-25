@@ -93,43 +93,6 @@
     }
   };
 
-  // `escape` borrowed from underscore
-  var escapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '`': '&#x60;'
-  };
-
-  var keys = function (obj) {
-    if (Object.keys) {
-      return Object.keys(obj);
-    }
-
-    var result = [];
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        keys.push(key);
-      }
-    }
-    return result;
-  };
-
-  var escape = function (string) {
-    var escaper = function (match) {
-      return escapeMap[match];
-    };
-
-    var source = '(?:' + keys(escapeMap).join('|') + ')';
-    var testRegexp = RegExp(source);
-    var replaceRegexp = RegExp(source, 'g');
-
-    string = string == null ? '' : '' + string;
-    return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
-  };
-
   function createStyle(styleText, context) {
       var style = document.createElement('style');
       style.type = 'text/css';
@@ -250,21 +213,6 @@
       return;
     }
 
-    var max = rank[0].weight;
-    var min = rank[rank.length - 1].weight;
-
-    var html = rank.map(function (item) {
-      var size = rank.length === 1
-        ? maxSize
-        : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
-      var code = [
-        '<li style="font-family: ' + escape(item.family) + '; font-size: ' + size + 'px;" title="' + escape(item.family) + '" data-family="' + escape(item.family) + '">',
-          escape(item.family) + '<span class="fi-count" title="' + item.count + ' glyph' + (item.count > 1 ? 's' : '') + '">' + item.count + '</span>',
-        '</li>'
-        ].join('');
-      return code;
-    });
-
     report = document.getElementById(id);
     if (!report) {
       report = document.createElement('aside');
@@ -283,49 +231,49 @@
 
       var computed = {
         className: 'fi-computed',
-        hint: 'Switch to actual (rendered) font families',
-        title: 'Might be quite slow on pages with lots of text.'
+        hint: 'Showing computed font families',
+        title: 'Click “switch” to see used (rendered) font families'
       };
 
       var used = {
         className: 'fi-used',
-        hint: 'Switch to computed font families',
-        title: ''
+        hint: 'Showing used (rendered) font families',
+        title: 'Click “switch” to see computed font families'
       };
 
-      function update(data) {
-        hint.innerHTML = data.hint;
+      function updateHint(data) {
+        hint.textContent = data.hint;
         hint.title = data.title;
         report.className = data.className;
       }
 
       var hint = document.createElement('span');
       hint.className = 'fi-switcher-hint';
-      update(computed);
+      updateHint(computed);
       switcher.appendChild(hint);
 
       var proceed = document.createElement('button');
-      proceed.innerHTML = 'Go';
+      proceed.textContent = 'Switch';
       proceed.className = 'fi-proceed';
       switcher.appendChild(proceed);
 
       proceed.onclick = function () {
         if (report.className === used.className) {
           show(calculate());
-          update(computed);
+          updateHint(computed);
         } else {
           self.port.emit('check-used');
-          update(used);
+          updateHint(used);
         }
       };
       var expand = document.createElement('button');
       expand.className = 'fi-expand';
-      expand.innerHTML = 'fi';
+      expand.textContent = 'fi';
       report.appendChild(expand);
 
       var close = document.createElement('button');
       close.className = 'fi-close';
-      close.innerHTML = '×';
+      close.textContent = '×';
       report.appendChild(close);
       close.onclick = function () {
         removeNode(report);
@@ -337,7 +285,7 @@
       link.innerHTML = 'Powered by <strong>fi</strong>';
       report.appendChild(link);
 
-      var style = '#fi-report button::-moz-focus-inner{padding:0;border:0}#fi-report{overflow:auto;position:fixed;top:0;right:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0,0,0,.8);text-align:left;z-index:2147483647;transition:all .5s}#fi-report ol{margin:0;padding:10px}#fi-report li{float:left;clear:left;margin:0 0 10px;padding:0 0 0 10px;border-left:3px solid rgba(255,255,255,.1);background-color:rgba(255,255,255,.1);list-style:none;line-height:1.5;color:#fff;text-shadow:1px 1px 0 #000;text-align:left;cursor:default}#fi-report .fi-computed-list li{cursor:pointer}#fi-report li:hover{background-color:rgba(255,255,255,.2);border-left-color:#fff}#fi-report .fi-count{float:right;border:none;margin:0 0 0 10px;padding:0 5px;background-color:#000;font-size:.5em;font-weight:400;vertical-align:middle;cursor:help}#fi-report .fi-link{position:absolute;right:10px;bottom:10px;padding:0 10px;border:none;border-radius:0;background-color:rgba(255,255,255,.1);font-size:12px;line-height:1.5;color:rgba(255,255,255,.7)}#fi-report .fi-link strong{color:#fff;font-family:inherit;font-size:12px;font-weight:100}#fi-report a,#fi-report button,#fi-report span{display:block;font-family:"Avenir Next","Segoe UI",Helvetica,Arial,sans-serif!important;font-weight:100!important;border-radius:0!important}#fi-report .fi-close,#fi-report .fi-expand,#fi-report .fi-proceed,#fi-report .fi-switcher-hint{background:rgba(255,255,255,.1)!important;border:none!important;color:rgba(255,255,255,.7)!important;box-shadow:none!important;text-shadow:1px 1px 0 #000!important;cursor:pointer}#fi-report .fi-close,#fi-report .fi-expand{position:absolute;top:10px;right:10px;width:48px;padding:0;line-height:48px;text-align:center;font-size:28px;font-weight:700!important;border-radius:0;box-shadow:none}#fi-report .fi-switcher{display:inline-block;margin:10px 0 0 10px;font-size:14px;line-height:24px;cursor:help}#fi-report .fi-proceed,#fi-report .fi-switcher-hint{display:inline-block;vertical-align:middle;overflow:hidden;line-height:24px;font-size:inherit}#fi-report .fi-switcher-hint{padding:0 10px;border:none}#fi-report .fi-switcher-hint[title]:not([title=""]){cursor:help}#fi-report .fi-proceed{width:0;padding:0;background:rgba(255,255,255,.3)!important;text-align:center;font-weight:400;word-wrap:normal;transition:width .5s 1s;cursor:pointer}#fi-report .fi-switcher:hover .fi-proceed{width:80px;transition-delay:0s}#fi-report .fi-close:hover,#fi-report .fi-expand:hover,#fi-report .fi-link:hover,#fi-report .fi-switcher-hint:hover{background:rgba(255,255,255,.2)!important;color:#fff!important}#fi-report .fi-expand{display:none;top:10px;right:10px;background:rgba(255,255,255,.3)!important;color:#fff!important}#fi-report .fi-expand:hover{display:none;top:10px;right:10px;background:rgba(255,255,255,.5)!important}#fi-report.fi-collapsed{width:68px;height:68px;background-color:transparent}#fi-report.fi-collapsed .fi-expand{display:block}#fi-report.fi-collapsed .fi-close,#fi-report.fi-collapsed .fi-link,#fi-report.fi-collapsed .fi-switcher,#fi-report.fi-collapsed ol,#fi-report.fi-computed .fi-used-list,#fi-report.fi-used .fi-computed-list{display:none}.fi-highlighted{outline:#c00 dotted 2px;outline-offset:-1px;-webkit-animation:highlight 1s infinite;animation:highlight 1s infinite}@keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}@-webkit-keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}';
+      var style = '#fi-report button::-moz-focus-inner{padding:0;border:0}#fi-report{overflow:auto;position:fixed;top:0;right:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0,0,0,.8);text-align:left;z-index:2147483647;transition:all .5s}#fi-report ol{margin:0;padding:10px}#fi-report li{float:left;clear:left;margin:0 0 10px;padding:0 0 0 10px;border-left:3px solid rgba(255,255,255,.1);background-color:rgba(255,255,255,.1);list-style:none;line-height:1.5;color:#fff;text-shadow:1px 1px 0 #000;text-align:left;cursor:default}#fi-report .fi-computed-list li{cursor:pointer}#fi-report li:hover{background-color:rgba(255,255,255,.2);border-left-color:#fff}#fi-report .fi-count{float:right;border:none;margin:0 0 0 10px;padding:0 5px;background-color:#000;font-size:.5em;font-weight:400;vertical-align:middle;cursor:help}#fi-report .fi-link{position:absolute;right:10px;bottom:10px;padding:0 10px;border:none;border-radius:0;background-color:rgba(255,255,255,.1);font-size:12px;line-height:1.5;color:rgba(255,255,255,.7)}#fi-report .fi-link strong{color:#fff;font-family:inherit;font-size:12px;font-weight:100}#fi-report a,#fi-report button,#fi-report span{display:block;font-family:"Avenir Next","Segoe UI",Helvetica,Arial,sans-serif!important;font-weight:100!important;border-radius:0!important}#fi-report .fi-close,#fi-report .fi-expand,#fi-report .fi-proceed,#fi-report .fi-switcher-hint{background:rgba(255,255,255,.1)!important;border:none!important;color:rgba(255,255,255,.7)!important;box-shadow:none!important;text-shadow:1px 1px 0 #000!important;cursor:pointer}#fi-report .fi-close,#fi-report .fi-expand{position:absolute;top:10px;right:10px;width:48px;padding:0;line-height:48px;text-align:center;font-size:28px;font-weight:700!important;border-radius:0;box-shadow:none}#fi-report .fi-switcher{display:inline-block;margin:10px 0 0 10px;font-size:14px;line-height:24px;cursor:help}#fi-report .fi-proceed,#fi-report .fi-switcher-hint{display:inline-block;vertical-align:middle;overflow:hidden;line-height:24px;font-size:inherit}#fi-report .fi-switcher-hint{padding:0 10px;border:none;cursor:help}#fi-report .fi-proceed{width:0;padding:0;background:rgba(255,255,255,.3)!important;text-align:center;font-weight:400;word-wrap:normal;transition:width .5s 1s;cursor:pointer}#fi-report .fi-switcher:hover .fi-proceed{width:80px;transition-delay:0s}#fi-report .fi-close:hover,#fi-report .fi-expand:hover,#fi-report .fi-link:hover,#fi-report .fi-switcher-hint:hover{background:rgba(255,255,255,.2)!important;color:#fff!important}#fi-report .fi-expand{display:none;top:10px;right:10px;background:rgba(255,255,255,.3)!important;color:#fff!important}#fi-report .fi-expand:hover{display:none;top:10px;right:10px;background:rgba(255,255,255,.5)!important}#fi-report.fi-collapsed{width:68px;height:68px;background-color:transparent}#fi-report.fi-collapsed .fi-expand{display:block}#fi-report.fi-collapsed .fi-close,#fi-report.fi-collapsed .fi-link,#fi-report.fi-collapsed .fi-switcher,#fi-report.fi-collapsed ol,#fi-report.fi-computed .fi-used-list,#fi-report.fi-used .fi-computed-list{display:none}.fi-highlighted{outline:#c00 dotted 2px;outline-offset:-1px;-webkit-animation:highlight 1s infinite;animation:highlight 1s infinite}@keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}@-webkit-keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}';
       createStyle(style, report);
 
       document.body.appendChild(report);
@@ -369,11 +317,34 @@
         stopPropagation(e);
       };
     }
+
+    var max = rank[0].weight;
+    var min = rank[rank.length - 1].weight;
+    var output;
     if (report.className === 'fi-used') {
-      usedList.innerHTML = html.join('');
+      output = usedList;
     } else {
-      list.innerHTML = html.join('');
+      output = list;
     }
+    output.innerHTML = '';
+    rank.forEach(function (item) {
+      var size = rank.length === 1
+        ? maxSize
+        : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
+      var li = document.createElement('li');
+      li.style.cssText = 'font-family: ' + item.family + '; font-size: ' + size + 'px;';
+      li.setAttribute('data-family', item.family);
+      li.title = item.family;
+      li.textContent = item.family;
+
+      var count = document.createElement('span');
+      count.className = 'fi-count';
+      count.title = item.count + ' glyph' + (item.count > 1 ? 's' : '');
+      count.textContent = item.count;
+
+      li.appendChild(count);
+      output.appendChild(li);
+    });
   };
 
   show(calculate());

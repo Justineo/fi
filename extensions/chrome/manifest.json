@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "fi",
   "description": "A tool which gives you a quick look at `font-family` usage in a webpage.",
   "version": "1.1.0",
@@ -10,11 +9,13 @@
   "permissions": [],
   "browser_action": {
     "default_icon": {
-        "128": "128.png"
+      "128": "128.png"
     }
   },
   "background": {
-    "scripts": ["main.js"],
+    "scripts": [
+      "main.js"
+    ],
     "persistent": false
   }
 }

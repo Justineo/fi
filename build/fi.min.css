@@ -12,8 +12,7 @@
 #fi-report .fi-close,#fi-report .fi-expand{position:absolute;top:10px;right:10px;width:48px;padding:0;line-height:48px;text-align:center;font-size:28px;font-weight:700!important;border-radius:0;box-shadow:none}
 #fi-report .fi-switcher{display:inline-block;margin:10px 0 0 10px;font-size:14px;line-height:24px;cursor:help}
 #fi-report .fi-proceed,#fi-report .fi-switcher-hint{display:inline-block;vertical-align:middle;overflow:hidden;line-height:24px;font-size:inherit}
-#fi-report .fi-switcher-hint{padding:0 10px;border:none}
-#fi-report .fi-switcher-hint[title]:not([title=""]){cursor:help}
+#fi-report .fi-switcher-hint{padding:0 10px;border:none;cursor:help}
 #fi-report .fi-proceed{width:0;padding:0;background:rgba(255,255,255,.3)!important;text-align:center;font-weight:400;word-wrap:normal;transition:width .5s 1s;cursor:pointer}
 #fi-report .fi-switcher:hover .fi-proceed{width:80px;transition-delay:0s}
 #fi-report .fi-close:hover,#fi-report .fi-expand:hover,#fi-report .fi-link:hover,#fi-report .fi-switcher-hint:hover{background:rgba(255,255,255,.2)!important;color:#fff!important}
