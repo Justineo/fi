@@ -3,7 +3,7 @@
 
   "name": "fi",
   "description": "A tool which gives you a quick look at `font-family` usage in a webpage.",
-  "version": "1.0",
+  "version": "1.1.0",
   "icons": {
     "128": "128.png"
   },

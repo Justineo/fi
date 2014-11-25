@@ -45,6 +45,7 @@
     return node.nodeType === Node.TEXT_NODE;
   };
 
+  // heuristic approach
   var isVisible = function (elem) {
     if (!elem || elem === document.documentElement) {
       return true;
@@ -55,6 +56,7 @@
     return style.display !== 'none'
       && style.visibility !== 'hidden'
       && parseFloat(style.opacity) !== 0
+      && !(parseFloat(style.textIndent) < -100)
       && isVisible(elem.parentNode);
   };
 
@@ -68,6 +70,27 @@
   var isRealText = function (node) {
     var parent = node.parentNode;
     return isTextNode(node) && isVisible(parent) && !ignoreTags[parent.tagName];
+  };
+
+  var hasClass = function (elem, clazz) {
+    var className = ' ' + elem.className + ' ';
+    return className.indexOf(' ' + clazz + ' ') !== -1;
+  };
+
+  var addClass = function (elem, clazz) {
+    if (elem.classList) {
+      elem.classList.add(clazz);
+    } else if (!hasClass(elem, clazz)) {
+      elem.className = trim(elem.className + ' ' + clazz);
+    }
+  };
+
+  var removeClass = function (elem, clazz) {
+    if (elem.classList) {
+      elem.classList.remove(clazz);
+    } else {
+      elem.className = compact((' ' + elem.className + ' ').replace(new RegExp('\\s' + clazz + '\\s', 'g'), ''));
+    }
   };
 
   // `escape` borrowed from underscore
@@ -168,6 +191,8 @@
   var maxSize = 36;
   var minSize = 18;
   var id = 'fi-report';
+  var highlightedClass = 'fi-highlighted';
+  var collapsedClass = 'fi-collapsed';
 
   var calculate = function () {
 
@@ -223,6 +248,10 @@
 {{/firefox}}
 
   var show = function (rank) {
+    if (!rank.length) {
+      return;
+    }
+
     var max = rank[0].weight;
     var min = rank[rank.length - 1].weight;
 
@@ -242,44 +271,62 @@
     if (!report) {
       report = document.createElement('aside');
       report.id = id;
-      report.className = 'fi-families';
 
       list = document.createElement('ol');
-      list.className = 'fi-families-list';
+      list.className = 'fi-computed-list';
       report.appendChild(list);
 {{#firefox}}
       usedList = document.createElement('ol');
-      usedList.className = 'fi-used-family-list';
+      usedList.className = 'fi-used-list';
       report.appendChild(usedList);
 
       var switcher = document.createElement('span');
       switcher.className = 'fi-switcher';
-      var switchHint = [
-        'Rendered font-families (maybe slow on some page)',
-        'Specified font-families'
-      ];
       report.insertBefore(switcher, list);
 
+      var computed = {
+        className: 'fi-computed',
+        hint: 'Switch to actual (rendered) font families',
+        title: 'Might be quite slow on pages with lots of text.'
+      };
+
+      var used = {
+        className: 'fi-used',
+        hint: 'Switch to computed font families',
+        title: ''
+      };
+
+      function update(data) {
+        hint.innerHTML = data.hint;
+        hint.title = data.title;
+        report.className = data.className;
+      }
+
       var hint = document.createElement('span');
-      hint.innerHTML = switchHint[0];
+      hint.className = 'fi-switcher-hint';
+      update(computed);
       switcher.appendChild(hint);
 
       var proceed = document.createElement('button');
-      proceed.innerHTML = 'Proceed';
+      proceed.innerHTML = 'Go';
       proceed.className = 'fi-proceed';
       switcher.appendChild(proceed);
+
       proceed.onclick = function () {
-        if (report.className === 'fi-used') {
-          hint.innerHTML = switchHint[0];
+        if (report.className === used.className) {
           show(calculate());
-          report.className = 'fi-families';
+          update(computed);
         } else {
-          hint.innerHTML = switchHint[1];
           self.port.emit('check-used');
-          report.className = 'fi-used';
+          update(used);
         }
       };
 {{/firefox}}
+      var expand = document.createElement('button');
+      expand.className = 'fi-expand';
+      expand.innerHTML = 'fi';
+      report.appendChild(expand);
+
       var close = document.createElement('button');
       close.className = 'fi-close';
       close.innerHTML = '×';
@@ -302,15 +349,25 @@
       report.onclick = function (e) {
         var target = getTarget(e);
 
-        if (matches(target, '#' + id + ' .families-list li, #' + id + ' .families-list li *')) {
-          while(!matches(target, '#' + id + ' .families-list li')) {
+        // expand
+        removeClass(report, collapsedClass);
+
+        // remove highlighted
+        var highlighted = document.body.querySelector('.' + highlightedClass);
+        highlighted && removeClass(highlighted, highlightedClass);
+
+        // click on sigle family, highlight the first matched element
+        if (matches(target, '#' + id + ' .fi-computed-list li, #' + id + ' .fi-computed-list li *')) {
+          while(!matches(target, '#' + id + ' .fi-computed-list li')) {
             target = target.parentNode;
           }
+
           var family = target.getAttribute('data-family');
           var elem = elemMap[family];
           if (elem) {
-            elem.style.outline = '2px dotted red';
             elem.scrollIntoView();
+            addClass(elem, highlightedClass);
+            addClass(report, collapsedClass);
           }
         }
         stopPropagation(e);

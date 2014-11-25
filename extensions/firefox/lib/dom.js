@@ -28,6 +28,7 @@ var isTextNode = function (node) {
 };
 exports.isTextNode = isTextNode;
 
+// heuristic approach
 var isVisible = function (elem) {
   if (!elem || elem === elem.ownerDocument.documentElement) {
     return true;
@@ -42,6 +43,7 @@ var isVisible = function (elem) {
   return style.display !== 'none'
     && style.visibility !== 'hidden'
     && parseFloat(style.opacity) !== 0
+    && !(parseFloat(style.textIndent) < -100)
     && isVisible(elem.parentNode);
 };
 exports.isVisible = isVisible;

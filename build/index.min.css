@@ -4,7 +4,7 @@ a{display:inline-block;border:1px solid #fff;border-radius:3px;color:#fff;line-h
 main{position:absolute;top:38.2%;left:50%;-webkit-transform:translate(-50%,-38.2%);transform:translate(-50%,-38.2%);width:600px;overflow:hidden;text-align:center}
 h1{font-weight:100;font-size:32px}
 .hint{color:rgba(255,255,255,.8);font-size:14px}
-span[title]{border-bottom:1px dotted rgba(255,255,255,.8);cursor:help}
+.tip{border-bottom:1px dotted rgba(255,255,255,.8);cursor:help}
 .link{padding:0 4px}
 .link:hover{background-color:#fff;color:#28a428}
 .link.main{display:block;width:200px;margin-right:auto;margin-left:auto;font-size:32px}

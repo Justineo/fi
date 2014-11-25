@@ -9,8 +9,7 @@ exports.calculate = function () {
   var weightMap = {};
   var maxSize = 36;
   var minSize = 18;
-  var fontStat = [];
-
+  var range = document.createRange();
   dom.walk(document.body, function (n) {
     if (!dom.isRealText(n)) {
       return;
@@ -22,17 +21,16 @@ exports.calculate = function () {
     }
 
     // iterate glyphs one by one
-    var glyphs = text
-      .split('')
-      .filter(function (glyph) {
-        return !glyph.match(/\s/);
-      })
-      .map(function (glyph) {
-        return document.createTextNode(glyph);
-      });
-    glyphs.forEach(function (glyph) {
-      n.parentNode.insertBefore(glyph, n);
-      var font = dom.getFonts(glyph)[0];
+    for (var i = 0; i < text.length; i++) {
+      range.setStart(n, i);
+      range.setEnd(n, i + 1);
+
+      // skip white spaces
+      if (range.toString().match(/\s/)) {
+        continue;
+      }
+
+      var font = dom.getFonts(range)[0];
       if (!font) {
         return;
       }
@@ -41,8 +39,8 @@ exports.calculate = function () {
         weightMap[family] = 0;
       }
       weightMap[family]++;
-      n.parentNode.removeChild(glyph);
     });
+
   }, function (n) {
     return n.id !== id;
   });

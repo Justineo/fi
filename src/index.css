@@ -50,7 +50,7 @@ h1 {
   font-size: 14px;
 }
 
-span[title] {
+.tip {
   border-bottom: 1px dotted rgba(255, 255, 255, 0.8);
   cursor: help;
 }
