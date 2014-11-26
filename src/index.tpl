@@ -20,12 +20,12 @@ var _hmt = _hmt || [];
 <header><a class="link github" id="fork">Fork me on GitHub</a></header>
 <main>
     <h1>Inspect font-family usage in a web page through a single click</h1>
-    <p><a class="link main" href="javascript:{{bookmarklet}}void(0)">fi</a></p>
+    <p><a class="link main" href="javascript:{{bookmarklet}}void(0)">fi <span>{{version}}</span></a></p>
     <p class="hint">Save as a bookmarklet or drag this onto your bookmark bar</p>
     <p class="hint headsup">Have <span class="tip" title="Bookmarklets may be blocked under certain security policies.">problems</span>? Try browser extensions below:</p>
     <p>
       <a class="link chrome" href="https://chrome.google.com/webstore/detail/fi/ijieejlhfllnijjknojcklolfjllhknd">Chrome Extension</a>
-      <a class="link firefox" href="https://addons.mozilla.org/zh-CN/firefox/addon/fi/">Firefox Add-on</a>
+      <a class="link firefox" href="https://addons.mozilla.org/zh-CN/firefox/addon/fi/" title="See rendered result here!">Firefox Add-on</a>
     </p>
     <p id="github-stats">
         <span class="stat"><a class="text" id="star-text">Star</a><a id="star-count">-</a></span>

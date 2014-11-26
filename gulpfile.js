@@ -52,6 +52,7 @@ gulp.task('home', ['minify-fi-js', 'minify-home-js', 'minify-home-css'], functio
     .pipe(mustache({
       style: fs.readFileSync('./build/index.min.css', { encoding: 'utf8' }),
       bookmarklet: fs.readFileSync('./build/fi.min.js', { encoding: 'utf8' }),
+      version: 'v' + JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf8' })).version,
       init: fs.readFileSync('./build/index.min.js', { encoding: 'utf8' })
     }))
     .pipe(rename({ extname: '.html' }))

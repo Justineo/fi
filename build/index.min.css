@@ -3,12 +3,14 @@ body{margin:0;background-color:#28a428;font-family:"Avenir Next","Segoe UI",Aria
 a{display:inline-block;border:1px solid #fff;border-radius:3px;color:#fff;line-height:2;vertical-align:middle;text-decoration:none;transition:background-color .3s,color .3s}
 main{position:absolute;top:38.2%;left:50%;-webkit-transform:translate(-50%,-38.2%);transform:translate(-50%,-38.2%);width:600px;overflow:hidden;text-align:center}
 h1{font-weight:100;font-size:32px}
+[title]{cursor:help}
 .hint{color:rgba(255,255,255,.8);font-size:14px}
-.tip{border-bottom:1px dotted rgba(255,255,255,.8);cursor:help}
+.tip{border-bottom:1px dotted rgba(255,255,255,.8)}
 .link{padding:0 4px}
 .link:hover{background-color:#fff;color:#28a428}
-.link.main{display:block;width:200px;margin-right:auto;margin-left:auto;font-size:32px}
-.link.github{position:fixed;top:10px;right:10px}
+.main{display:block;width:200px;margin-right:auto;margin-left:auto;font-size:32px}
+.main span{font-size:14px;opacity:.8}
+.github{position:fixed;top:10px;right:10px}
 .chrome:before,.firefox:before,.github:before,.headsup:before,.text:before{font-family:home;margin-right:3px}
 .github:before,.text:before{content:"\e803"}
 .headsup:before{content:"\e804"}
