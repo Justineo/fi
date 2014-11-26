@@ -45,19 +45,35 @@
     return node.nodeType === Node.TEXT_NODE;
   };
 
-  // heuristic approach
+  // heuristic approach to detect actual visibility of an element
+  var elemCache = [];
+  var indexCache = {};
+
   var isVisible = function (elem) {
     if (!elem || elem === document.documentElement) {
       return true;
     }
 
+    var i;
+    if ((i = elemCache.indexOf(elem)) !== -1) {
+      return indexCache[i];
+    }
+
     var style = window.getComputedStyle(elem);
     var parent = elem.parentNode;
-    return style.display !== 'none'
-      && style.visibility !== 'hidden'
-      && parseFloat(style.opacity) !== 0
-      && !(parseFloat(style.textIndent) < -100)
+    var result = style.display !== 'none' // totally none
+      && style.visibility !== 'hidden' // hidden
+      && parseFloat(style.opacity) !== 0 // transparent
+      && parseFloat(style.textIndent) > -512 && style.textIndent !== '100%' // usual image replace method: -9999px, -9999em, 100%
+      && (parseFloat(style.width) * parseFloat(style.height) > 1 || style.overflow === 'visible') // hide but accessible through screen readers
+      && parseFloat(style.fontSize) > 0 // can't see texts
+      && !/rect\(1px(?:(?:,\s*|\s+)1px){3}\)/.test(style.clip) // hide text using clip: rect(1px, 1px, 1px, 1px)
       && isVisible(elem.parentNode);
+
+    indexCache[elemCache.length] = result;
+    elemCache.push(elem);
+
+    return result;
   };
 
   var ignoreTags = {

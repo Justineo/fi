@@ -45,19 +45,35 @@
     return node.nodeType === Node.TEXT_NODE;
   };
 
-  // heuristic approach
+  // heuristic approach to detect actual visibility of an element
+  var elemCache = [];
+  var indexCache = {};
+
   var isVisible = function (elem) {
     if (!elem || elem === document.documentElement) {
       return true;
     }
 
+    var i;
+    if ((i = elemCache.indexOf(elem)) !== -1) {
+      return indexCache[i];
+    }
+
     var style = window.getComputedStyle(elem);
     var parent = elem.parentNode;
-    return style.display !== 'none'
-      && style.visibility !== 'hidden'
-      && parseFloat(style.opacity) !== 0
-      && !(parseFloat(style.textIndent) < -100)
+    var result = style.display !== 'none' // totally none
+      && style.visibility !== 'hidden' // hidden
+      && parseFloat(style.opacity) !== 0 // transparent
+      && parseFloat(style.textIndent) > -512 && style.textIndent !== '100%' // usual image replace method: -9999px, -9999em, 100%
+      && (parseFloat(style.width) * parseFloat(style.height) > 1 || style.overflow === 'visible') // hide but accessible through screen readers
+      && parseFloat(style.fontSize) > 0 // can't see texts
+      && !/rect\(1px(?:(?:,\s*|\s+)1px){3}\)/.test(style.clip) // hide text using clip: rect(1px, 1px, 1px, 1px)
       && isVisible(elem.parentNode);
+
+    indexCache[elemCache.length] = result;
+    elemCache.push(elem);
+
+    return result;
   };
 
   var ignoreTags = {
@@ -285,7 +301,7 @@
       link.innerHTML = 'Powered by <strong>fi</strong>';
       report.appendChild(link);
 
-      var style = '#fi-report button::-moz-focus-inner{padding:0;border:0}#fi-report{overflow:auto;position:fixed;top:0;right:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0,0,0,.8);text-align:left;z-index:2147483647;transition:all .5s}#fi-report ol{margin:0;padding:10px}#fi-report li{float:left;clear:left;margin:0 0 10px;padding:0 0 0 10px;border-left:3px solid rgba(255,255,255,.1);background-color:rgba(255,255,255,.1);list-style:none;line-height:1.5;color:#fff;text-shadow:1px 1px 0 #000;text-align:left;cursor:default}#fi-report .fi-computed-list li{cursor:pointer}#fi-report li:hover{background-color:rgba(255,255,255,.2);border-left-color:#fff}#fi-report .fi-count{float:right;border:none;margin:0 0 0 10px;padding:0 5px;background-color:#000;font-size:.5em;font-weight:400;vertical-align:middle;cursor:help}#fi-report .fi-link{position:absolute;right:10px;bottom:10px;padding:0 10px;border:none;border-radius:0;background-color:rgba(255,255,255,.1);font-size:12px;line-height:1.5;color:rgba(255,255,255,.7)}#fi-report .fi-link strong{color:#fff;font-family:inherit;font-size:12px;font-weight:100}#fi-report a,#fi-report button,#fi-report span{display:block;font-family:"Avenir Next","Segoe UI",Helvetica,Arial,sans-serif!important;font-weight:100!important;border-radius:0!important}#fi-report .fi-close,#fi-report .fi-expand,#fi-report .fi-proceed,#fi-report .fi-switcher-hint{background:rgba(255,255,255,.1)!important;border:none!important;color:rgba(255,255,255,.7)!important;box-shadow:none!important;text-shadow:1px 1px 0 #000!important;cursor:pointer}#fi-report .fi-close,#fi-report .fi-expand{position:absolute;top:10px;right:10px;width:48px;padding:0;line-height:48px;text-align:center;font-size:28px;font-weight:700!important;border-radius:0;box-shadow:none}#fi-report .fi-switcher{display:inline-block;margin:10px 0 0 10px;font-size:14px;line-height:24px;cursor:help}#fi-report .fi-proceed,#fi-report .fi-switcher-hint{display:inline-block;vertical-align:middle;overflow:hidden;line-height:24px;font-size:inherit}#fi-report .fi-switcher-hint{padding:0 10px;border:none;cursor:help}#fi-report .fi-proceed{width:0;padding:0;background:rgba(255,255,255,.3)!important;text-align:center;font-weight:400;word-wrap:normal;transition:width .5s 1s;cursor:pointer}#fi-report .fi-switcher:hover .fi-proceed{width:80px;transition-delay:0s}#fi-report .fi-close:hover,#fi-report .fi-expand:hover,#fi-report .fi-link:hover,#fi-report .fi-switcher-hint:hover{background:rgba(255,255,255,.2)!important;color:#fff!important}#fi-report .fi-expand{display:none;top:10px;right:10px;background:rgba(255,255,255,.3)!important;color:#fff!important}#fi-report .fi-expand:hover{display:none;top:10px;right:10px;background:rgba(255,255,255,.5)!important}#fi-report.fi-collapsed{width:68px;height:68px;background-color:transparent}#fi-report.fi-collapsed .fi-expand{display:block}#fi-report.fi-collapsed .fi-close,#fi-report.fi-collapsed .fi-link,#fi-report.fi-collapsed .fi-switcher,#fi-report.fi-collapsed ol,#fi-report.fi-computed .fi-used-list,#fi-report.fi-used .fi-computed-list{display:none}.fi-highlighted{outline:#c00 dotted 2px;outline-offset:-1px;-webkit-animation:highlight 1s infinite;animation:highlight 1s infinite}@keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}@-webkit-keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}';
+      var style = '#fi-report button::-moz-focus-inner{padding:0;border:0}#fi-report{overflow:auto;position:fixed;top:0;right:0;width:100%;height:100%;margin:0;padding:0;background-color:rgba(0,0,0,.8);text-align:left;z-index:2147483647;transition:all .5s}#fi-report ol{margin:0;padding:10px}#fi-report li{float:left;clear:left;margin:0 0 10px;padding:0 0 0 10px;border-left:3px solid rgba(255,255,255,.1);background-color:rgba(255,255,255,.1);list-style:none;line-height:1.5;color:#fff;text-shadow:1px 1px 0 #000;text-align:left;cursor:default}#fi-report .fi-computed-list li{cursor:pointer}#fi-report li:hover{background-color:rgba(255,255,255,.2);border-left-color:#fff}#fi-report .fi-count{float:right;border:none;margin:0 0 0 10px;padding:0 5px;background-color:#000;font-size:.5em;font-weight:400;vertical-align:middle;cursor:help}#fi-report .fi-link{position:absolute;right:10px;bottom:10px;padding:0 10px;border:none;border-radius:0;background-color:rgba(255,255,255,.1);font-size:12px;line-height:1.5;color:rgba(255,255,255,.7)}#fi-report .fi-link strong{color:#fff;font-family:inherit;font-size:12px;font-weight:100}#fi-report a,#fi-report button,#fi-report span{display:block;font-family:"Avenir Next","Segoe UI",Helvetica,Arial,sans-serif!important;font-weight:100!important;border-radius:0!important;text-transform:none}#fi-report .fi-close,#fi-report .fi-expand,#fi-report .fi-proceed,#fi-report .fi-switcher-hint{background:rgba(255,255,255,.1)!important;border:none!important;color:rgba(255,255,255,.7)!important;box-shadow:none!important;text-shadow:1px 1px 0 #000!important;cursor:pointer}#fi-report .fi-close,#fi-report .fi-expand{position:absolute;top:10px;right:10px;width:48px;padding:0;line-height:48px;text-align:center;font-size:28px;font-weight:700!important;border-radius:0;box-shadow:none}#fi-report .fi-switcher{display:inline-block;margin:10px 0 0 10px;font-size:14px;line-height:24px;cursor:help}#fi-report .fi-proceed,#fi-report .fi-switcher-hint{display:inline-block;vertical-align:middle;overflow:hidden;line-height:24px;font-size:inherit}#fi-report .fi-switcher-hint{padding:0 10px;border:none;cursor:help}#fi-report .fi-proceed{width:0;padding:0;background:rgba(255,255,255,.3)!important;text-align:center;font-weight:400;word-wrap:normal;transition:width .5s 1s;cursor:pointer}#fi-report .fi-switcher:hover .fi-proceed{width:80px;transition-delay:0s}#fi-report .fi-close:hover,#fi-report .fi-link:hover,#fi-report .fi-switcher-hint:hover{background:rgba(255,255,255,.2)!important;color:#fff!important}#fi-report .fi-expand{display:none;top:10px;right:10px;background:rgba(0,0,0,.1)!important;color:#fff!important}#fi-report .fi-expand:hover{background:rgba(0,0,0,.2)!important}#fi-report.fi-collapsed{width:68px;height:68px;background-color:transparent}#fi-report.fi-collapsed .fi-expand{display:block}#fi-report.fi-collapsed .fi-close,#fi-report.fi-collapsed .fi-link,#fi-report.fi-collapsed .fi-switcher,#fi-report.fi-collapsed ol,#fi-report.fi-computed .fi-used-list,#fi-report.fi-used .fi-computed-list{display:none}.fi-highlighted{outline:#c00 dotted 2px;outline-offset:-1px;-webkit-animation:highlight 1s infinite;animation:highlight 1s infinite}@keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}@-webkit-keyframes highlight{0%{opacity:1}50%{opacity:.2}100%{opacity:1}}';
       createStyle(style, report);
 
       document.body.appendChild(report);
