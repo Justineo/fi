@@ -177,6 +177,7 @@
 
     // cleanup
     weightMap = {};
+    elemMap = {};
 
     walk(document.body, function (n) {
       if (!isRealText(n)) {
@@ -189,14 +190,25 @@
         return;
       }
 
-      var family = window.getComputedStyle(n.parentNode).fontFamily;
+      var parent = n.parentNode;
+      var family = window.getComputedStyle(parent).fontFamily;
 
       if (!weightMap.hasOwnProperty(family)) {
         weightMap[family] = 0;
-        elemMap[family] = n.parentNode;
+        elemMap[family] = [];
       }
 
       weightMap[family] += count;
+
+      var elemList = elemMap[family];
+      var last = elemList[elemList.length - 1];
+      // push in three cases in order to prevent duplication
+      // 1. empty list
+      // 2. already in the list
+      // 3. following the last added node in document order
+      if (!last || last === parent || last.compareDocumentPosition(parent) & 4) { // Node.DOCUMENT_POSITION_FOLLOWING === 2
+        elemList.push(parent);
+      }
     }, function (n) {
       return n.id !== id;
     });
@@ -290,14 +302,17 @@
       expand.className = 'fi-expand';
       expand.textContent = 'fi';
       report.appendChild(expand);
+      expand.onclick = function () {
+        // expand
+        removeClass(report, collapsedClass);
+        unhighlight();
+      }
 
       var close = document.createElement('button');
       close.className = 'fi-close';
       close.textContent = '×';
       report.appendChild(close);
-      close.onclick = function () {
-        removeNode(report);
-      };
+      close.onclick = destroy;
 
       var link = document.createElement('a');
       link.className = 'fi-link';
@@ -313,9 +328,6 @@
       report.onclick = function (e) {
         var target = getTarget(e);
 
-        // expand
-        removeClass(report, collapsedClass);
-
         // remove highlighted
         var highlighted = document.body.querySelector('.' + highlightedClass);
         highlighted && removeClass(highlighted, highlightedClass);
@@ -327,11 +339,14 @@
           }
 
           var family = target.getAttribute('data-family');
-          var elem = elemMap[family];
-          if (elem) {
-            elem.scrollIntoView();
-            addClass(elem, highlightedClass);
-            addClass(report, collapsedClass);
+          var elemList = elemMap[family];
+          if (elemList) {
+            for (var i = 0, j = elemList.length; i < j; i++) {
+              var elem = elemList[i];
+              // elem.scrollIntoView();
+              addClass(elem, highlightedClass);
+              addClass(report, collapsedClass);
+            }
           }
         }
         stopPropagation(e);
@@ -378,6 +393,19 @@
       li.appendChild(count);
       output.appendChild(li);
     });
+  };
+
+  var destroy = function () {
+    removeNode(report);
+    unhighlight();
+  };
+
+  var unhighlight = function () {
+    var highlighted = toArray(document.querySelectorAll('.' + highlightedClass));
+
+    for (var i = 0, j = highlighted.length; i < j; i++) {
+      removeClass(highlighted[i], highlightedClass);
+    }
   };
 
   show(calculate());
