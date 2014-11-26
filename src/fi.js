@@ -342,7 +342,8 @@
     var min = rank[rank.length - 1].weight;
     var output;
 {{#firefox}}
-    if (report.className === 'fi-used') {
+    var isUsed = report.className === 'fi-used';
+    if (isUsed) {
       output = usedList;
     } else {
       output = list;
@@ -356,7 +357,15 @@
         ? maxSize
         : (item.weight - min) / (max - min) * (maxSize - minSize) + minSize;
       var li = document.createElement('li');
+{{#firefox}}
+      var family = item.family;
+      if (isUsed) {
+        family = '"' + family + '"';
+      }
+      li.style.cssText = 'font-family: ' + family + '; font-size: ' + size + 'px;';
+{{/firefox}}{{^firefox}}
       li.style.cssText = 'font-family: ' + item.family + '; font-size: ' + size + 'px;';
+{{/firefox}}
       li.setAttribute('data-family', item.family);
       li.title = item.family;
       li.textContent = item.family;

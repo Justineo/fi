@@ -8,6 +8,8 @@
   position: fixed;
   top: 0;
   right: 0;
+  bottom: auto;
+  left: auto;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -61,7 +63,7 @@
 }
 
 #fi-report .fi-link {
-  position: absolute;
+  position: fixed;
   right: 10px;
   bottom: 10px;
   padding: 0 10px;
@@ -104,7 +106,7 @@
 
 #fi-report .fi-close,
 #fi-report .fi-expand {
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 10px;
   width: 48px;

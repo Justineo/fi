@@ -5,6 +5,22 @@ var toArray = function (arrayish) {
   return [].slice.call(arrayish);
 };
 
+var utils = require('sdk/window/utils');
+var getWindow = function () {
+    var active = utils.getMostRecentBrowserWindow();
+    return active.content;
+};
+exports.getWindow = getWindow;
+
+var getDocument = function (node) {
+    if (node && node.ownerDocument) {
+        return node.ownerDocument;
+    }
+
+    return getWindow().document;
+};
+exports.getDocument = getDocument;
+
 var walk = function (node, callback, filter) {
   if (typeof filter === 'function' && !filter(node)) {
     return;
@@ -33,7 +49,7 @@ var elemCache = [];
 var indexCache = {};
 
 var isVisible = function (elem) {
-  if (!elem || elem === document.documentElement) {
+  if (!elem || elem === getDocument(elem)) {
     return true;
   }
 
@@ -42,7 +58,7 @@ var isVisible = function (elem) {
     return indexCache[i];
   }
 
-  var style = window.getComputedStyle(elem);
+  var style = getWindow().getComputedStyle(elem);
   var parent = elem.parentNode;
   var result = style.display !== 'none' // totally none
     && style.visibility !== 'hidden' // hidden
@@ -73,7 +89,7 @@ var isRealText = function (node) {
 };
 exports.isRealText = isRealText;
 
-exports.getFonts = function (range) {
+var getFonts = function (range) {
     if (!DOMUtils) {
         return [];
     }
@@ -86,13 +102,4 @@ exports.getFonts = function (range) {
 
     return fonts;
 };
-
-exports.getDocument = function (node) {
-    if (node && node.ownerDocument) {
-        return node.ownerDocument;
-    }
-
-    var utils = require('sdk/window/utils');
-    var active = utils.getMostRecentBrowserWindow();
-    return active.content.document;
-};
+exports.getFonts = getFonts;
