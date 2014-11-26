@@ -336,10 +336,12 @@
 
           var family = target.getAttribute('data-family');
           var elemList = elemMap[family];
-          if (elemList) {
+          if (elemList && elemList.length) {
+            // scroll the first one into view
+            elemList[0].scrollIntoView();
+
             for (var i = 0, j = elemList.length; i < j; i++) {
               var elem = elemList[i];
-              // elem.scrollIntoView();
               addClass(elem, highlightedClass);
               addClass(report, collapsedClass);
             }

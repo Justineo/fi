@@ -59,7 +59,9 @@ gulp.task('home', ['minify-fi-js', 'minify-home-js', 'minify-home-css'], functio
 });
 
 gulp.task('pack-chrome-extension', ['minify-fi-js'], function (cb) {
-  exec('find extensions/chrome -path \'*/.*\' -prune -o -type f -print | zip extensions/packed/chrome.zip -@', function (error, stdout, stderr) {
+  exec('find . -path \'*/.*\' -prune -o -type f -print | zip ../packed/chrome.zip -@', {
+    cwd: 'extensions/chrome'
+  }, function (error, stdout, stderr) {
     if (error) {
       return cb(error);
     } else {
