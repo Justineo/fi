@@ -11,7 +11,7 @@ exports.calculate = function () {
   var minSize = 18;
   var range = document.createRange();
   dom.walk(document.body, function (n) {
-    if (!dom.isRealText(n)) {
+    if (!dom.isVisibleText(n)) {
       return;
     }
 

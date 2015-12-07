@@ -65,7 +65,6 @@ var isVisible = function (elem) {
     && parseFloat(style.opacity) !== 0 // transparent
     && parseFloat(style.textIndent) > -512 && style.textIndent !== '100%' // usual image replace method: -9999px, -9999em, 100%
     && (parseFloat(style.width) * parseFloat(style.height) > 1 || style.overflow === 'visible') // hide but accessible through screen readers
-    && parseFloat(style.fontSize) > 0 // can't see texts
     && !/rect\(1px(?:(?:,\s*|\s+)1px){3}\)/.test(style.clip) // hide text using clip: rect(1px, 1px, 1px, 1px)
     && isVisible(elem.parentNode);
 
@@ -83,14 +82,16 @@ var ignoreTags = {
   'IFRAME': true,
   'OPTION': true
 };
-var isRealText = function (node) {
+var isVisibleText = function (node) {
   var parent = node.parentNode;
-  return isTextNode(node) && isVisible(parent) && !ignoreTags[parent.tagName];
+  var fontSize = parseFloat(getWindow().getComputedStyle(parent).fontSize);
+  return isTextNode(node) && isVisible(parent) && fontSize > 0 && !ignoreTags[parent.tagName];
 };
-exports.isRealText = isRealText;
+exports.isVisibleText = isVisibleText;
 
 var getFonts = function (range) {
     if (!DOMUtils) {
+        console.log('No DOMUtils');
         return [];
     }
 
